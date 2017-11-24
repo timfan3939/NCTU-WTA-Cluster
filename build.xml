@@ -21,4 +21,9 @@
 		<delete dir="${bin.dir}" />
 	</target>
 
+	<target name="test" description="test">
+		<java fork="true" failonerror="yes" classname="tw.edu.nctu.dcslab.WTACluster.Test.TestWTAProblem" classpath="${bin.dir}" maxmemory="4096m" >
+		</java>
+	</target>
+
 </project>

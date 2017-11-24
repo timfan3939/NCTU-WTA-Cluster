@@ -23,7 +23,17 @@ public class WTAProblem implements ProblemInterface {
 			Arrays.fill( row, 0.0 );
 	}
 
-	public double FitnessFunction(int[] solution) {
+	public void setTargetWeight( double[] targetWeight ) {
+		this.targetWeight = Arrays.copyOf(targetWeight, numTarget);
+	}
+
+	public void setHitProbability( double[][] hitProbability ) {
+		for (int i=0; i<this.numWeapon; i++) {
+			this.hitProbability[i] = Arrays.copyOf(hitProbability[i], numTarget);
+		}
+	}
+
+	public double fitnessFunction(int[] solution) {
 		double result = 0.0;
 
 		for (int j=0; j<numTarget; j++) {
@@ -36,5 +46,13 @@ public class WTAProblem implements ProblemInterface {
 		}
 
 		return result;
+	}
+
+	public int getSolutionLength() {
+		return this.numWeapon;
+	}
+
+	public int getSolutionMax() {
+		return this.numTarget;
 	}
 }
