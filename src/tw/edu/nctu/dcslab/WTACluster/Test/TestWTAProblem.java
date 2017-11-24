@@ -40,13 +40,18 @@ public class TestWTAProblem {
 		
 		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 100);
 
-		for( int i=0; i<10000; i++ ) {
+		System.out.println("Start Genetic Test");
+
+		double bestValue = 9999;
+
+		for( int i=0; i<200000; i++ ) {
 			genetic.DoIteration();
 
-			if( i % 1000 == 0) {
-				int[] sol = genetic.GetBestSolution();
-				System.out.println("" + i + "\t" + problem.fitnessFunction(sol));
+			if ( bestValue > problem.fitnessFunction(genetic.GetBestSolution()) ) {
+				bestValue = problem.fitnessFunction(genetic.GetBestSolution());
+				System.out.println("~~" + i + ": " + bestValue);
 			}
+
 
 		}
 

@@ -9,9 +9,12 @@ public abstract class HeuristicInterface {
 
 	// Ask do one iteration
 	public abstract void DoIteration();
-
+	
+	protected int[] bestSolution;
 	// Get currently Best Solution
-	public abstract int[] GetBestSolution();
+	public int[] GetBestSolution() {
+		return this.bestSolution;
+	}
 
 	// Add Possible Solutions
 	public abstract void AddSolutions(int[][] solution);

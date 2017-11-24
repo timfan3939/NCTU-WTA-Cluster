@@ -21,6 +21,9 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		this.rand = new Random();
 		this.population = population;
 
+		this.crossoverRate = 0.8;
+		this.mutationRate = 0.4;
+
 		this.GeneratePopulation();
 	}
 
@@ -36,17 +39,18 @@ public class GeneticAlgorithm extends HeuristicInterface {
 			}
 			solutions.add( new Chromosomes(sol, problem) );
 		}
+		childSolutions = new ArrayList<Chromosomes>();
 	}
 
 	public void DoIteration() {
-		childSolutions = new ArrayList<Chromosomes>();
-		
 		Duplicate();
 		Crossover();
 		Mutation();
 		Selection();
 
-		childSolutions = null;
+		TestBestSolution();
+
+		childSolutions.clear();
 	}
 
 	private void Duplicate() {
@@ -109,28 +113,40 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 	private void Selection() {
 		solutions.clear();
-
 		UpdateChildSolutions();
-		double totalValue = 0;
-		for ( Chromosomes ch : childSolutions )
-			totalValue += ( 1 / ch.value );
+
+		double totalValue = 0.0;
+		double[] value = new double[childSolutions.size()];
+		for ( int i = 0; i<value.length; i++ ) {
+			value[i] = 1/childSolutions.get(i).value;
+			totalValue += value[i];
+		}
 		
 		for ( int i=0; i<population; i++ ) {
 			double chosen = rand.nextDouble();
-			for ( int j=0; j<childSolutions.size(); j++ ) {
-				chosen -= ( 1/childSolutions.get(j).value ) / totalValue;
+			for ( int j=0; j<value.length; j++ ) {
+				chosen -= value[j] / totalValue;
 				if ( chosen < 0.0 ) {
 					solutions.add( childSolutions.get(j) );
+					break;
 				}
 			}
 		}
 	}
 
 
-	public int[] GetBestSolution() {
+	public void TestBestSolution() {
 		UpdateSolutions();
 		Collections.sort(solutions);
-		return solutions.get(0).solution;
+
+		if(bestSolution == null) {
+			bestSolution = solutions.get(0).solution;
+			return;
+		}
+		
+		if( problem.fitnessFunction(bestSolution) > solutions.get(0).value ) {
+			bestSolution = solutions.get(0).solution;
+		}
 	}
 
 	public void UpdateSolutions() {
@@ -164,8 +180,23 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		
 		@Override
 		public int compareTo( Chromosomes ch ) {
+			this.UpdateValue();
+			ch.UpdateValue();
+			
 			if(this.value > ch.value)
 				return 1;
+			else if (this.value < ch.value)
+				return -1;
+			else {
+				for( int i=0; i<this.solution.length; i++ ) {
+					if ( this.solution[i] > ch.solution[i] ) {
+						return 1;
+					}
+					else if (this.solution[i] < ch.solution[i]) {
+						return -1;
+					}
+				}
+			}
 			return 0;
 		}
 	}
