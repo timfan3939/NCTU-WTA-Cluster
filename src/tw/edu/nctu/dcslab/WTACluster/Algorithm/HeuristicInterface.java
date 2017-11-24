@@ -3,16 +3,21 @@ package tw.edu.nctu.dcslab.WTACluster.Algorithm;
 import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 
 
-public interface HeuristicInterface {
+public abstract class HeuristicInterface {
+
+	protected ProblemInterface problem;
+
 	// Ask do one iteration
-	public void DoIteration();
+	public abstract void DoIteration();
 
 	// Get currently Best Solution
-	public int[] GetBestSolution();
+	public abstract int[] GetBestSolution();
 
 	// Add Possible Solutions
-	public void AddSolutions(int[][] solution);
+	public abstract void AddSolutions(int[][] solution);
 
 	// Set Problem Interface
-	public void SetProblemInterface(ProblemInterface problem);
+	public void SetProblemInterface(ProblemInterface problem) {
+		this.problem = problem;
+	}
 }
