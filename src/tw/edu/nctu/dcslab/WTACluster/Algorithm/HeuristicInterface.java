@@ -15,9 +15,14 @@ public abstract class HeuristicInterface {
 
 	// Add Possible Solutions
 	public abstract void AddSolutions(int[][] solution);
-
+	
+	protected int solutionLength;
+	protected int solutionValueMax;
 	// Set Problem Interface
 	public void SetProblemInterface(ProblemInterface problem) {
 		this.problem = problem;
+		this.solutionLength = problem.getSolutionLength();
+		this.solutionValueMax = problem.getSolutionMax();
 	}
+
 }
