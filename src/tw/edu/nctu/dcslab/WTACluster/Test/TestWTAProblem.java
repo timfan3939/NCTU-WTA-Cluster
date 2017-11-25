@@ -13,15 +13,18 @@ public class TestWTAProblem {
 
 		Random rand = new Random();
 
-		WTAProblem wta = new WTAProblem(14, 70);
+		int numWeapon = 14;
+		int numTarget = 70;
 
-		double[] weight = new double[70];
-		for ( int i=0; i<70; i++ )
+		WTAProblem wta = new WTAProblem(numWeapon, numTarget);
+
+		double[] weight = new double[numTarget];
+		for ( int i=0; i<numTarget; i++ )
 			weight[i] = rand.nextDouble() * 10;
 
-		double[][] hitProbability = new double[14][70];
-		for ( int i=0; i<14; i++ )
-			for ( int j=0; j<70; j++ )
+		double[][] hitProbability = new double[numWeapon][numTarget];
+		for ( int i=0; i<numWeapon; i++ )
+			for ( int j=0; j<numTarget; j++ )
 				hitProbability[i][j] = rand.nextDouble();
 
 		wta.setTargetWeight(weight);
@@ -30,10 +33,10 @@ public class TestWTAProblem {
 		ProblemInterface problem = wta;
 
 		for( int round = 0; round < 10; round++ ) {
-			int solution[] = new int[14];
+			int solution[] = new int[numWeapon];
 
 			for( int i=0; i<14; i++ ) 
-				solution[i] = rand.nextInt(70);
+				solution[i] = rand.nextInt(numTarget);
 
 			System.out.println("" + round + " " + problem.fitnessFunction(solution));
 		}
@@ -43,13 +46,21 @@ public class TestWTAProblem {
 		System.out.println("Start Genetic Test");
 
 		double bestValue = 9999;
+		int percentage = 0;
+		int iterationRound = 200000;
 
-		for( int i=0; i<200000; i++ ) {
+		for( int i=0; i<iterationRound; i++ ) {
 			genetic.DoIteration();
 
 			if ( bestValue > problem.fitnessFunction(genetic.GetBestSolution()) ) {
-				bestValue = problem.fitnessFunction(genetic.GetBestSolution());
-				System.out.println("~~" + i + ": " + bestValue);
+				double tmp = problem.fitnessFunction(genetic.GetBestSolution());
+				System.out.println("~~" + i + ": " + bestValue + " diff: " + (tmp - bestValue));
+				bestValue = tmp;
+			}
+
+			if ( percentage != (int)(100 * i/iterationRound) ) {
+				percentage = (int) (100 * i/iterationRound);
+				System.out.println("" + percentage + "% completed.");
 			}
 
 
