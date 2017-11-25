@@ -20,6 +20,11 @@
 	<target name="clean" description="clean up">
 		<delete dir="${bin.dir}" />
 	</target>
+	<target name="sync" description="distribute file to other machine">
+		<exec dir="." executable="/bin/bash" osfamily="unix">
+			<arg value="script/syncfile.sh" />
+		</exec>
+	</target>
 	<target name="test" description="quick test" depends="clean, build, testGenetic" >
 	</target>
 
