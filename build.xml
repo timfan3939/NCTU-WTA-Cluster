@@ -6,7 +6,7 @@
 	<property name="lib.dir" value="lib" />
 	<property name="bin.dir" value="bin" />
 
-	<target name="build">
+	<target name="build" depends="clean">
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false">
 			<classpath>
@@ -25,7 +25,19 @@
 			<arg value="script/syncfile.sh" />
 		</exec>
 	</target>
-	<target name="test" description="quick test" depends="clean, build, testGenetic" >
+	<target name="test" description="quick test" depends="clean, build, central" >
+	</target>
+
+	<target name="central" description="start central agent" depends="build">
+		<java fork="true" failonerror="yes" classname="jade.Boot" >
+			<classpath>
+				<pathelement location="${lib.dir}/jade.jar" />
+				<pathelement path="${bin.dir}" />
+				<pathelement path="." />
+			</classpath>
+			<arg value="-agents" />
+			<arg value="central:tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent" />
+		</java>
 	</target>
 
 	<target name="testGenetic" description="test genetic algorithm and WTA problem">
