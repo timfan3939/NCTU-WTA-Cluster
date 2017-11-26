@@ -1,9 +1,11 @@
 package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
 
-
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+
+
 import java.util.Scanner;
+
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent;
 
@@ -24,6 +26,13 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 	@Override
 	public void action() {
 		String line = scanner.nextLine();
-		System.out.println(line);
+		ACLMessage msg;
+
+		switch (line) {
+			case "quit":
+				myAgent.addBehaviour(new ShutdownPlatformBehaviour(myAgent) );
+			default:
+				System.out.println(line);
+		}
 	}
 }
