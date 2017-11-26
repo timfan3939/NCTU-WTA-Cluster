@@ -28,10 +28,14 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 
 		switch (line) {
 			case "quit":
+				myAgent.addBehaviour(new CentralPingPeerBehaviour(myAgent, "quit") );
 				myAgent.addBehaviour(new ShutdownPlatformBehaviour(myAgent) );
 				break;
 			case "loadpeer":
 				myAgent.addBehaviour(new CentralLoadPeerBehaviour(myAgent) );
+				break;
+			case "pingpeer":
+				myAgent.addBehaviour(new CentralPingPeerBehaviour(myAgent, "Ping") );
 				break;
 			default:
 				System.out.println(line);

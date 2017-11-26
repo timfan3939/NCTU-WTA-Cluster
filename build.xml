@@ -41,6 +41,18 @@
 		</java>
 	</target>
 
+	<target name="weapon" description="start weapon compute agent" depends="build">
+		<java fork="true" failonerror="yes" classname="jade.Boot">
+			<classpath>
+				<pathelement location="${lib.dir}/jade.jar" />
+				<pathelement path="${bin.dir}" />
+				<pathelement path="." />
+			</classpath>
+			<arg value="-agents" />
+			<arg value="${host.name}:tw.edu.nctu.dcslab.WTACluster.Agent.ComputeAgent" />
+		</java>
+	</target>
+
 	<target name="testGenetic" description="test genetic algorithm and WTA problem">
 		<java fork="true" failonerror="yes" classname="tw.edu.nctu.dcslab.WTACluster.Test.TestGeneticAlgorithm" classpath="${bin.dir}" maxmemory="4096m" >
 		</java>

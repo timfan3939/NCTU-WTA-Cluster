@@ -12,9 +12,14 @@ public class CentralPingPeerBehaviour extends OneShotBehaviour {
 	private static final long serialVersionUID = 20171126170810L;
 
 	private CentralAgent myAgent;
+	private String content;
 
-	public CentralPingPeerBehaviour( CentralAgent agent ) {
+	public CentralPingPeerBehaviour( CentralAgent agent, String content ) {
 		this.myAgent = agent;
+		this.content = content;
+		if(this.content.isEmpty()) {
+			this.content = "Ping";
+		}
 	}
 
 	@Override
@@ -26,7 +31,7 @@ public class CentralPingPeerBehaviour extends OneShotBehaviour {
 			msg.addReceiver(peer.getAID());
 		}
 
-		msg.setContent("Ping");
+		msg.setContent(content);
 
 		myAgent.send(msg);
 
