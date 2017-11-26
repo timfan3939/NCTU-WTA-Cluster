@@ -9,4 +9,8 @@ public class PeerInfo {
 		this.name = name;
 		this.ip = ip;
 	}
+
+	public String toString() {
+		return this.name + "@" + this.ip;
+	}
 }

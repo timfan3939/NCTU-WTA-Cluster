@@ -37,7 +37,6 @@ public class CentralLoadPeerBehaviour extends OneShotBehaviour {
 				if(subLine.length == 2) {
 					PeerInfo peer = new PeerInfo( subLine[0], subLine[1] );
 					peers.add(peer);
-					System.out.println("Peer " + line + " added");
 				}
 				else {
 					System.out.println("Line Error: " + line);

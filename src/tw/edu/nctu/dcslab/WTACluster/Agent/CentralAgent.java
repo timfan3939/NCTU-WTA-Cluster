@@ -28,6 +28,9 @@ public class CentralAgent extends Agent {
 
 	public void SetPeerList( ArrayList<PeerInfo> peers ) {
 		this.peerList = peers;
+		for( PeerInfo peer : this.peerList ) {
+			System.out.println( "Found peer: " + peer );
+		}
 	}
 
 }
