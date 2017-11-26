@@ -33,4 +33,8 @@ public class CentralAgent extends Agent {
 		}
 	}
 
+	public ArrayList<PeerInfo> GetPeerList() {
+		return this.peerList;
+	}
+
 }
