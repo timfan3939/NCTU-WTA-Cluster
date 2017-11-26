@@ -25,6 +25,7 @@ public class ShutdownPlatformBehaviour extends OneShotBehaviour {
 
 	@Override
 	public void action() {
+		block(1000);
 		Codec codec = new SLCodec();
 		this.myAgent.getContentManager().registerLanguage(codec);
 		this.myAgent.getContentManager().registerOntology(JADEManagementOntology.getInstance());

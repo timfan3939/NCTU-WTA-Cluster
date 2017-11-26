@@ -5,6 +5,7 @@
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
 	<property name="bin.dir" value="bin" />
+	<exec dir="${basedir}" executable="hostname" outputproperty="host.name" />
 
 	<target name="build" depends="clean">
 		<mkdir dir="${bin.dir}" />
@@ -36,7 +37,19 @@
 				<pathelement path="." />
 			</classpath>
 			<arg value="-agents" />
-			<arg value="central:tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent" />
+			<arg value="${host.name}:tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent" />
+		</java>
+	</target>
+
+	<target name="weapon" description="start weapon compute agent" depends="build">
+		<java fork="true" failonerror="yes" classname="jade.Boot">
+			<classpath>
+				<pathelement location="${lib.dir}/jade.jar" />
+				<pathelement path="${bin.dir}" />
+				<pathelement path="." />
+			</classpath>
+			<arg value="-agents" />
+			<arg value="${host.name}:tw.edu.nctu.dcslab.WTACluster.Agent.ComputeAgent" />
 		</java>
 	</target>
 

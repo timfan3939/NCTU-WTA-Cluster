@@ -3,9 +3,7 @@ package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-
 import java.util.Scanner;
-
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent;
 
@@ -30,7 +28,15 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 
 		switch (line) {
 			case "quit":
+				myAgent.addBehaviour(new CentralPingPeerBehaviour(myAgent, "quit") );
 				myAgent.addBehaviour(new ShutdownPlatformBehaviour(myAgent) );
+				break;
+			case "loadpeer":
+				myAgent.addBehaviour(new CentralLoadPeerBehaviour(myAgent) );
+				break;
+			case "pingpeer":
+				myAgent.addBehaviour(new CentralPingPeerBehaviour(myAgent, "Ping") );
+				break;
 			default:
 				System.out.println(line);
 		}
