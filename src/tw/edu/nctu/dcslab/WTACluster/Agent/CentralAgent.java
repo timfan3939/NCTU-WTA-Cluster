@@ -8,7 +8,7 @@ import tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour.CentralListenBehaviour;
 
 public class CentralAgent extends Agent {
 	private static final long serialVersionUID = -5271213701466983534L;
-	ThreadedBehaviourFactory tbf;
+	public ThreadedBehaviourFactory tbf;
 
 	@Override
 	protected void setup() {
