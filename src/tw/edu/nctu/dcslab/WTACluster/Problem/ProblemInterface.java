@@ -8,4 +8,8 @@ public interface ProblemInterface {
 	public int getSolutionLength();
 	// The max integer value of the element in a solution
 	public int getSolutionMax();
+	
+	// Encode and decode a problem
+	public String EncodeProblem();
+	public void DecodeProblem(String str);
 }

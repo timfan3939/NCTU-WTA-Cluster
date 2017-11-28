@@ -17,6 +17,12 @@ public class SphereProblem implements ProblemInterface {
 		}
 		return result;
 	}
+	    public String EncodeProblem() {
+			return null;
+	    }       
+		
+		public void DecodeProblem(String str) {
+		}
 
 	public int getSolutionLength() {
 		return this.solutionLength;
