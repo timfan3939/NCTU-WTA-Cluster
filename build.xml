@@ -26,6 +26,13 @@
 			<arg value="script/syncfile.sh" />
 		</exec>
 	</target>
+
+	<target name="startall" description="start all compute agent">
+		<exec dir="." executable="/bin/bash" osfamily="unix">
+			<arg value="script/startall.sh" />
+		</exec>
+	</target>
+
 	<target name="test" description="quick test" depends="clean, build, central" >
 	</target>
 
