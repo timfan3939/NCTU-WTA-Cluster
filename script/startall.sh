@@ -1,10 +1,11 @@
 #!/bin/bash
 
-cat conf/peerList | while read name ip
+cat conf/peerList | while read -r name ip
 do
 	echo ${name}
 	echo "Starting..."
-	cmd="ssh ${name} \"cd NCTU-WTA-Cluster; nohup ant weapon &>output.log &\""
+	cmd="ssh -f ${name} \"ant -f NCTU-WTA-Cluster/build.xml weapon &>output.log \""
+	echo $cmd
 	eval $cmd
 	echo "...Done"
 done
