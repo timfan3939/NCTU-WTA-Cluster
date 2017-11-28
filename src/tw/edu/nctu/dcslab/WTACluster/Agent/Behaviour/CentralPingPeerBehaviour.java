@@ -25,6 +25,15 @@ public class CentralPingPeerBehaviour extends OneShotBehaviour {
 	@Override
 	public void action() {
 		ArrayList<PeerInfo> peers = myAgent.GetPeerList();
+		
+		if ( peers == null ) {
+			System.out.println("Please load peer list first");
+			return;
+		}
+		else if ( peers.size() == 0 ) {
+			System.out.println("Please load peer list first");
+			return;
+		}
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		for(PeerInfo peer : peers) {
