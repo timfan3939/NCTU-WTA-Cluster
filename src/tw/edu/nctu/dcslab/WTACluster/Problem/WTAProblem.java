@@ -1,6 +1,9 @@
 package tw.edu.nctu.dcslab.WTACluster.Problem;
 
 import java.util.Arrays;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class WTAProblem implements ProblemInterface {
 
@@ -49,7 +52,7 @@ public class WTAProblem implements ProblemInterface {
 	}
 	
 	public String EncodeProblem() {
-		String str = "Probabability:";
+		String str = "Probabability:\n";
 		
 		for(int i=0; i<this.numWeapon; i++) {
 			for( int j=0; j<this.numTarget; j++ )
@@ -98,5 +101,26 @@ public class WTAProblem implements ProblemInterface {
 	public String toString() {
 		String str = this.EncodeProblem();
 		return str;
+	}
+
+	public void SaveProblemToFile(String path) {
+		try {
+			FileOutputStream fout = new FileOutputStream( path );
+			fout.write(this.EncodeProblem().getBytes());
+			fout.flush();
+			fout.close();
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("File Not Found Exception with " + path);
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			System.err.println("I/O error with " + path);
+			e.printStackTrace();
+		}
+	}
+
+	public void LoadProblemFromFile(String path) {
+		// TODO: load problem from a file
 	}
 }

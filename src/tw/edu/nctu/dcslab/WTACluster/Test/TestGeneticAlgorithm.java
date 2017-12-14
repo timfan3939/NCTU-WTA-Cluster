@@ -40,6 +40,8 @@ public class TestGeneticAlgorithm {
 
 			System.out.println("" + round + " " + problem.fitnessFunction(solution));
 		}
+
+		problem.SaveProblemToFile("WTAProblem.txt");
 		
 		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 100);
 

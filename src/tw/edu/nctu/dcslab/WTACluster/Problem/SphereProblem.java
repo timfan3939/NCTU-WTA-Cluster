@@ -31,4 +31,12 @@ public class SphereProblem implements ProblemInterface {
 	public int getSolutionMax() {
 		return 10000;
 	}
+
+	public void LoadProblemFromFile(String path) {
+		// TODO: maybe load problem from a file?
+	}
+
+	public void SaveProblemToFile(String path) {
+		// TODO:
+	}
 }

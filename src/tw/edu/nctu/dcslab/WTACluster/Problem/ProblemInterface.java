@@ -12,4 +12,7 @@ public interface ProblemInterface {
 	// Encode and decode a problem
 	public String EncodeProblem();
 	public void DecodeProblem(String str);
+
+	public void LoadProblemFromFile(String path);
+	public void SaveProblemToFile(String path);
 }
