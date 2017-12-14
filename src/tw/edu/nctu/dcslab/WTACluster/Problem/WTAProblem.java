@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.Integer;
+import java.lang.NumberFormatException;
 
 public class WTAProblem implements ProblemInterface {
 
@@ -58,7 +60,7 @@ public class WTAProblem implements ProblemInterface {
 		str += "Weapon:" + this.numWeapon + "\n";
 		str += "Target:" + this.numTarget + "\n";
 
-		str += "Probabability:\n";
+		str += "Probability:\n";
 		
 		for(int i=0; i<this.numWeapon; i++) {
 			for( int j=0; j<this.numTarget; j++ )
@@ -77,8 +79,53 @@ public class WTAProblem implements ProblemInterface {
 		int lineNum = 0;
 		String[] line = str.split("\n");
 		String[] subLine;
-		// For the Probability Line
+		
+		if (!line[lineNum].matches("WTAProblem:")) {
+			System.err.println("This is not WTA Problem, this is " + line[0]);
+			return;
+		}
 		lineNum++;
+
+		subLine = line[lineNum].split(":");
+		if ( subLine[0].matches("Weapon") ) {
+			try {
+				this.numWeapon = Integer.parseInt(subLine[1]);
+			}
+			catch (NumberFormatException e) {
+				System.err.println("Error when parsing weapon number line: " + line[lineNum]);
+				e.printStackTrace();
+				return;
+			}
+		}
+		else {
+			System.err.println("This is not the line about the number of agent: " + line[lineNum]);
+			return;
+		}
+		lineNum++;
+
+		subLine = line[lineNum].split(":");
+		if ( subLine[0].matches("Target") ) {
+			try {
+				this.numTarget = Integer.parseInt(subLine[1]);
+			}
+			catch (NumberFormatException e) {
+				System.err.println("Error when parsing target number line: " + line[lineNum]);
+				e.printStackTrace();
+				return;
+			}
+		}
+		else {
+			System.err.println("This is not the line about the number of target: " + line[lineNum]);
+			return;
+		}
+		lineNum++;
+		
+		if( !line[lineNum].matches("Probability:") ) {
+			System.err.println("Error when checking the line of Probability: " + line[lineNum]);
+			return;
+		}
+		lineNum++;
+
 
 		for( int i = 0; i<this.numWeapon; i++ ) {
 			subLine = line[lineNum + i].split(" ");
@@ -86,10 +133,15 @@ public class WTAProblem implements ProblemInterface {
 				this.hitProbability[i][j] = Double.parseDouble(subLine[j]);
 			}
 		}
-
 		lineNum += this.numWeapon;
-		// For the Weight Line
-		lineNum++;
+
+        if( !line[lineNum].matches("Weight:") ) {
+			System.err.println("Error when checking the line of Weight " + line[lineNum]);
+            return;
+        }
+        lineNum++;
+
+
 		subLine = line[lineNum].split(" ");
 		for( int i=0; i<this.numTarget; i++ )
 			this.targetWeight[i] = Double.parseDouble(subLine[i]);
@@ -127,12 +179,13 @@ public class WTAProblem implements ProblemInterface {
 	}
 
 	public void LoadProblemFromFile(String path) {
+		String content = "";
 		try {
 			BufferedReader fin = new BufferedReader( new FileReader(path) );
 			
 			String line;
 			while( (line = fin.readLine()) != null ) {
-				System.out.println(line);
+				content += line + "\n";
 			}
 			
 			fin.close();
@@ -145,5 +198,6 @@ public class WTAProblem implements ProblemInterface {
 			System.err.println("I/O Error with " + path);
 			e.printStackTrace();
 		}
+		this.DecodeProblem(content);
 	}
 }
