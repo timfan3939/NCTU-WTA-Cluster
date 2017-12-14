@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class WTAProblem implements ProblemInterface {
 
@@ -52,7 +54,11 @@ public class WTAProblem implements ProblemInterface {
 	}
 	
 	public String EncodeProblem() {
-		String str = "Probabability:\n";
+		String str = "WTAProblem:\n";
+		str += "Weapon:" + this.numWeapon + "\n";
+		str += "Target:" + this.numTarget + "\n";
+
+		str += "Probabability:\n";
 		
 		for(int i=0; i<this.numWeapon; i++) {
 			for( int j=0; j<this.numTarget; j++ )
@@ -121,6 +127,23 @@ public class WTAProblem implements ProblemInterface {
 	}
 
 	public void LoadProblemFromFile(String path) {
-		// TODO: load problem from a file
+		try {
+			BufferedReader fin = new BufferedReader( new FileReader(path) );
+			
+			String line;
+			while( (line = fin.readLine()) != null ) {
+				System.out.println(line);
+			}
+			
+			fin.close();
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("File Not Found Exception with " + path);
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			System.err.println("I/O Error with " + path);
+			e.printStackTrace();
+		}
 	}
 }

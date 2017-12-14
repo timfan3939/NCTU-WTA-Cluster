@@ -42,6 +42,7 @@ public class TestGeneticAlgorithm {
 		}
 
 		problem.SaveProblemToFile("WTAProblem.txt");
+		problem.LoadProblemFromFile("WTAProblem.txt");
 		
 		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 100);
 
@@ -49,7 +50,7 @@ public class TestGeneticAlgorithm {
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 200000;
+		int iterationRound = 20000;
 
 		for( int i=0; i<iterationRound; i++ ) {
 			genetic.DoIteration();
