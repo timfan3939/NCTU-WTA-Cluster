@@ -33,13 +33,19 @@ public class TestGeneticAlgorithm {
 		ProblemInterface problem = wta;
 
 		for( int round = 0; round < 10; round++ ) {
+		
+			problem.LoadProblemFromFile("WTAProblem.txt");
 			int solution[] = new int[numWeapon];
 
 			for( int i=0; i<14; i++ ) 
-				solution[i] = rand.nextInt(numTarget);
+				//solution[i] = rand.nextInt(numTarget);
+				solution[i] = i;
 
 			System.out.println("" + round + " " + problem.fitnessFunction(solution));
 		}
+
+		//problem.SaveProblemToFile("WTAProblem.txt");
+		//problem.LoadProblemFromFile("WTAProblem.txt");
 		
 		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 100);
 
@@ -47,7 +53,7 @@ public class TestGeneticAlgorithm {
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 200000;
+		int iterationRound = 20000;
 
 		for( int i=0; i<iterationRound; i++ ) {
 			genetic.DoIteration();
