@@ -53,24 +53,25 @@ public class TestGeneticAlgorithm {
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 20000;
+		int iterationRound = 750000;
 
 		for( int i=0; i<iterationRound; i++ ) {
 			genetic.DoIteration();
 
 			if ( bestValue > problem.fitnessFunction(genetic.GetBestSolution()) ) {
 				double tmp = problem.fitnessFunction(genetic.GetBestSolution());
-				System.out.println("~~" + i + ": " + bestValue + " diff: " + (tmp - bestValue));
+				System.out.println("## " + i + ": \n\t" + bestValue + " -> \n\t" + tmp + " \n\tdiff: " + (tmp - bestValue));
 				bestValue = tmp;
 			}
 
-			if ( percentage != (int)(100 * i/iterationRound) ) {
-				percentage = (int) (100 * i/iterationRound);
+			if ( percentage != (int)(1000 * i/iterationRound) ) {
+				percentage = (int) (1000 * i/iterationRound);
 				System.out.println("" + percentage + "% completed.");
 			}
 
 
 		}
+		System.out.println("Best Value: " + bestValue);
 
 	}
 }
