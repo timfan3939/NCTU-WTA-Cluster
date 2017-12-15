@@ -48,7 +48,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		Mutation();
 		Selection();
 
-		TestBestSolution();
+		UpdateLocalBestSolution();
 
 		childSolutions.clear();
 	}
@@ -135,7 +135,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 
-	public void TestBestSolution() {
+	public void UpdateLocalBestSolution() {
 		UpdateSolutions();
 		Collections.sort(solutions);
 
