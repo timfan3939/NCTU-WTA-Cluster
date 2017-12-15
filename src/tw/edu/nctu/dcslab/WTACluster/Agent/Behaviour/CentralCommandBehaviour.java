@@ -37,8 +37,12 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 			case "pingpeer":
 				myAgent.addBehaviour(new CentralPingPeerBehaviour(myAgent, "Ping") );
 				break;
+			case "batch":
+				myAgent.addBehaviour(new CentralExperimentBehaviour(myAgent, "experiment/single"));
+				break;
 			default:
-				System.out.println(line);
+				System.out.println("Error: " + line);
+				System.out.println("Available: quit loadpeer pingpeer batch");
 		}
 	}
 }
