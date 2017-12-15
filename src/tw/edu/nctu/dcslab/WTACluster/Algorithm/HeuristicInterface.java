@@ -16,6 +16,8 @@ public abstract class HeuristicInterface {
 		return this.bestSolution;
 	}
 
+	public abstract boolean SetAlgorithmParameter(String str);
+
 	// Add Possible Solutions
 	public abstract void AddSolutions(int[][] solution);
 	
@@ -27,5 +29,4 @@ public abstract class HeuristicInterface {
 		this.solutionLength = problem.getSolutionLength();
 		this.solutionValueMax = problem.getSolutionMax();
 	}
-
 }
