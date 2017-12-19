@@ -12,10 +12,12 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 	private static final long serialVersionUID = 20171219142439L;
 
 	private CentralAgent myAgent;
+	private String ID;
 
-	public CentralDispatchProblemBehaviour ( CentralAgent agent ) {
+	public CentralDispatchProblemBehaviour ( CentralAgent agent, String ID) {
 		super(agent);
 		this.myAgent = agent;
+		this.ID = ID;
 	}
 
 	public void action() {
@@ -34,9 +36,9 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 			msg.addReceiver( peer.getAID() );
 		}
 
-		msg.setContent("Problem");
+		msg.setContent("Problem\n" + this.ID);
 
 		this.myAgent.send(msg);
-		System.out.println("New problem");
+		System.out.println("New problem: " + this.ID);
 	}
 }

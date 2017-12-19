@@ -35,8 +35,10 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 			
 			SequentialBehaviour seq = new SequentialBehaviour(this.myAgent);
 
+			String ID = "" + System.currentTimeMillis();
+
 			for( int i=0; i<5; i++ ) {
-				CentralDispatchProblemBehaviour dispatch = new CentralDispatchProblemBehaviour(this.myAgent);
+				CentralDispatchProblemBehaviour dispatch = new CentralDispatchProblemBehaviour(this.myAgent, ID + "_" + i);
 				CentralCollectResultBehaviour collect = new CentralCollectResultBehaviour(this.myAgent);
 				
 				seq.addSubBehaviour( dispatch );
