@@ -45,10 +45,7 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 				myAgent.addBehaviour( new ShutdownPlatformBehaviour(myAgent) );
 				break;
 			case "Problem":
-				reply = msg.createReply();
-				reply.setContent("Result from " + myAgent.getName() + " of Problem " + lines[1]);
-				reply.setPerformative(ACLMessage.CONFIRM);
-				myAgent.send(reply);
+				this.myAgent.addBehaviour(new ComputeExecuteBehaviour( this.myAgent, msg ));
 				break;
 			default:
 				System.out.println(content);
