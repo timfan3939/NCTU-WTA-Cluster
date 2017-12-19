@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent;
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
+import tw.edu.nctu.dcslab.WTACluster.Problem.WTAProblem;
 
 public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 	private static final long serialVersionUID = 20171219142439L;
@@ -40,9 +41,37 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 			msg.addReceiver( peer.getAID() );
 		}
 
-		msg.setContent("Problem\n" + this.ID);
+		msg.setContent(generateContent());
 
 		this.myAgent.send(msg);
-		System.out.println("New problem: " + this.ID);
+		System.out.println("----------\nNew problem: " + this.ID);
+		System.out.println(msg.getContent());
+	}
+
+	private String generateContent() {
+		String content = "";
+		content += "Problem" + "\n";
+		content += this.ID + "\n";
+		content += "--" + "\n";
+		
+		// WTA Problem
+		WTAProblem wta = new WTAProblem(14, 70);
+		wta.LoadProblemFromFile(this.problemFile);
+		content += wta.EncodeProblem() + "\n";
+
+		content += "--" + "\n";
+
+		// Peer List
+		ArrayList<PeerInfo> peers = this.myAgent.GetPeerList();
+		for( PeerInfo peer:peers ) {
+			content += peer.name + " " + peer.ip + "\n";
+		}
+		
+		content += "--" + "\n";
+
+		content += this.setting;
+
+
+		return content;
 	}
 }
