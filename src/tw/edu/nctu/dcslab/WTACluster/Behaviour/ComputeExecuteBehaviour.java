@@ -13,25 +13,64 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private ACLMessage message;
 
 	private boolean doneYet;
+	private int state;
+
+	private String result;
 	
 	public ComputeExecuteBehaviour( ComputeAgent agent, ACLMessage message ) {
 		super(agent);
 		this.myAgent = agent;
 		this.message = message;
 		this.doneYet = false;
+		this.state = 0;
+		this.result = "";
 	}
 	
 	@Override
 	public void action() {
 		if ( doneYet )
 			return;
-		String[] line = this.message.getContent().split("\n");
+
+		switch( state ) {
+			case 0:
+				parseProblem();
+				break;
+			case 1:
+				execution();
+				break;
+			case 2:
+				replyWithResult();
+				break;
+			default:
+				doneYet = true;
+		}
+	}
+
+	private void parseProblem() {
+		String content = this.message.getContent();
+		String[] subContent = content.split("--\n");
+
+		for(String str:subContent) {
+			String[] subLine = str.split("\n");
+
+			this.result += "" + subLine.length + " ";
+		}
+
+
+		this.state = 1;
+	}
+
+	private void execution() {
+		this.state = 2;
+	}
+
+	private void replyWithResult() {
 		ACLMessage reply = message.createReply();
-		reply.setContent("Result from " + myAgent.getName() + " of Problem " + line[1]);
 		reply.setPerformative(ACLMessage.CONFIRM);
-		this.myAgent.send(reply);
-		
-		this.doneYet = true;
+		reply.setContent("Result from " + myAgent.getName() + " of Problem " + "this.problemID" + " " + this.result);
+		this.myAgent.send( reply );
+
+		this.state = 3;
 	}
 
 	@Override
