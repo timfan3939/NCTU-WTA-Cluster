@@ -13,12 +13,14 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 
 	private CentralAgent myAgent;
 	private String ID;
+	private String problemFile;
 	private String setting;
 
-	public CentralDispatchProblemBehaviour ( CentralAgent agent, String ID, String setting) {
+	public CentralDispatchProblemBehaviour ( CentralAgent agent, String ID, String problemFile, String setting) {
 		super(agent);
 		this.myAgent = agent;
 		this.ID = ID;
+		this.problemFile = problemFile;
 		this.setting = setting;
 	}
 

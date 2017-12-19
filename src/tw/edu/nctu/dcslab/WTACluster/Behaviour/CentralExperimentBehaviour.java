@@ -32,28 +32,30 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 
 			String line;
 			String setting = "";
+			String problemFile = "";
 			int i = 0;
 			while( (line = fin.readLine()) != null ) {
 				if ( line.matches("--") ) {
-					seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, setting ) );
+					seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
 					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent ) );
 					setting = "";
 					i++;
 				}
 				else if( line.startsWith("Problem:") ) {
-					setting += line;
+					problemFile = line.split(":")[1];
 				}
 				else {
-					setting += "\n" + line;
+					setting += ( (setting.isEmpty()?"":"\n") + line );
+
 				}
 			}
-			if ( !setting.isEmpty() ) {
-				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, setting ) );
+			if ( !problemFile.isEmpty() ) {
+				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
 				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent ) );
 			}
 
 			this.myAgent.addBehaviour(seq);
-		}
+		}	
 		catch( Exception e ) {
 			e.printStackTrace();
 		}
