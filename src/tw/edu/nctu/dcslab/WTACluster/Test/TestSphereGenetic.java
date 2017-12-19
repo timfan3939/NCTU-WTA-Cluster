@@ -47,8 +47,8 @@ public class TestSphereGenetic {
 				bestValue = tmp;
 			}
 
-			if ( percentage != (int)(100 * i/iterationRound) ) {
-				percentage = (int) (100 * i/iterationRound);
+			if ( percentage != (100 * i/iterationRound) ) {
+				percentage = (100 * i/iterationRound);
 				System.out.println("" + percentage + "% completed.");
 			}
 

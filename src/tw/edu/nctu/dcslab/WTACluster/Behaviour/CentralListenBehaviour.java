@@ -21,7 +21,7 @@ public class CentralListenBehaviour extends CyclicBehaviour {
 	public void action() {
 		ACLMessage msg = null;
 		try {
-			msg = myAgent.receive(MessageTemplate.MatchAll());
+			msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 		}
 		catch (Exception e) {
 			e.printStackTrace();

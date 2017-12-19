@@ -1,6 +1,7 @@
 package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.SequentialBehaviour;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,6 +32,17 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 				System.out.println(line);
 			}
 			fin.close();
+			
+			SequentialBehaviour seq = new SequentialBehaviour(this.myAgent);
+
+			for( int i=0; i<5; i++ ) {
+				CentralDispatchProblemBehaviour dispatch = new CentralDispatchProblemBehaviour(this.myAgent);
+				CentralCollectResultBehaviour collect = new CentralCollectResultBehaviour(this.myAgent);
+				
+				seq.addSubBehaviour( dispatch );
+				seq.addSubBehaviour( collect );
+			}
+			this.myAgent.addBehaviour(seq);
 		}
 		catch( Exception e ) {
 			e.printStackTrace();

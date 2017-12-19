@@ -33,14 +33,22 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 
 		String content = msg.getContent();
 		String[] lines = content.split("\n");
+		ACLMessage reply = null;
 		switch (lines[0]) {
 			case "Ping":
-				ACLMessage reply = msg.createReply();
+				reply = msg.createReply();
 				reply.setContent("Ping reply from " + myAgent.getName());
+				reply.setPerformative(ACLMessage.INFORM);
 				myAgent.send(reply);
 				break;
 			case "quit":
 				myAgent.addBehaviour( new ShutdownPlatformBehaviour(myAgent) );
+				break;
+			case "Problem":
+				reply = msg.createReply();
+				reply.setContent("Result from " + myAgent.getName());
+				reply.setPerformative(ACLMessage.CONFIRM);
+				myAgent.send(reply);
 				break;
 			default:
 				System.out.println(content);

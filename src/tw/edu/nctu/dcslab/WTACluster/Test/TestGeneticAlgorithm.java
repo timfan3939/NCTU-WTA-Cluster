@@ -64,8 +64,8 @@ public class TestGeneticAlgorithm {
 				bestValue = tmp;
 			}
 
-			if ( percentage != (int)(1000 * i/iterationRound) ) {
-				percentage = (int) (1000 * i/iterationRound);
+			if ( percentage != (1000 * i/iterationRound) ) {
+				percentage = (1000 * i/iterationRound);
 				System.out.println("" + percentage + "% completed.");
 			}
 
