@@ -48,7 +48,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		Mutation();
 		Selection();
 
-		TestBestSolution();
+		UpdateLocalBestSolution();
 
 		childSolutions.clear();
 	}
@@ -135,7 +135,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 
-	public void TestBestSolution() {
+	public void UpdateLocalBestSolution() {
 		UpdateSolutions();
 		Collections.sort(solutions);
 
@@ -199,5 +199,30 @@ public class GeneticAlgorithm extends HeuristicInterface {
 			}
 			return 0;
 		}
+	}
+
+	@Override
+	public boolean SetAlgorithmParameter(String str) {
+		String[] line = str.split("\n");
+		String[] subline = null;
+
+		for(int l = 0; l < line.length; l++) {
+			subline = line[l].split(":");
+			if( subline.length != 2 ) {
+				continue;
+			}
+			switch(subline[0]) {
+				case "CrossoverRate":
+					this.crossoverRate = java.lang.Double.parseDouble(subline[1]);
+					break;
+				case "MutationRate":
+					this.mutationRate = java.lang.Double.parseDouble(subline[1]);
+					break;
+				default:
+					break;
+			}
+		}
+
+		return false;
 	}
 }

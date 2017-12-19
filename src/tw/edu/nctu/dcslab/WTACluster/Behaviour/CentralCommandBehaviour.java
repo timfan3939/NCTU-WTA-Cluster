@@ -1,4 +1,4 @@
-package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
+package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -37,8 +37,12 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 			case "pingpeer":
 				myAgent.addBehaviour(new CentralPingPeerBehaviour(myAgent, "Ping") );
 				break;
+			case "batch":
+				myAgent.addBehaviour(new CentralExperimentBehaviour(myAgent, "experiment/single"));
+				break;
 			default:
-				System.out.println(line);
+				System.out.println("Error: " + line);
+				System.out.println("Available: quit loadpeer pingpeer batch");
 		}
 	}
 }

@@ -119,13 +119,17 @@ public class WTAProblem implements ProblemInterface {
 			return;
 		}
 		lineNum++;
+
+		this.targetWeight = new double[this.numTarget];
+		this.hitProbability = new double[this.numWeapon][this.numTarget];
+		for (double row[] : this.hitProbability)
+			Arrays.fill( row, 0.0 );
 		
 		if( !line[lineNum].matches("Probability:") ) {
 			System.err.println("Error when checking the line of Probability: " + line[lineNum]);
 			return;
 		}
 		lineNum++;
-
 
 		for( int i = 0; i<this.numWeapon; i++ ) {
 			subLine = line[lineNum + i].split(" ");

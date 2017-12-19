@@ -1,4 +1,4 @@
-package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
+package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -15,6 +15,7 @@ public class CentralPingPeerBehaviour extends OneShotBehaviour {
 	private String content;
 
 	public CentralPingPeerBehaviour( CentralAgent agent, String content ) {
+		super(agent);
 		this.myAgent = agent;
 		this.content = content;
 		if(this.content.isEmpty()) {

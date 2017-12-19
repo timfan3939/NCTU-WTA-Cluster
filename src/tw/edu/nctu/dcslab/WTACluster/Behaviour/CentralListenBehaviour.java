@@ -1,4 +1,4 @@
-package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
+package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -21,7 +21,7 @@ public class CentralListenBehaviour extends CyclicBehaviour {
 	public void action() {
 		ACLMessage msg = null;
 		try {
-			msg = myAgent.receive(MessageTemplate.MatchAll());
+			msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
