@@ -1,4 +1,4 @@
-package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
+package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;

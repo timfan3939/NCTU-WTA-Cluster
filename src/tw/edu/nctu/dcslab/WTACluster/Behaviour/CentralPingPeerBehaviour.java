@@ -1,4 +1,4 @@
-package tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour;
+package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;

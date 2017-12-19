@@ -5,8 +5,8 @@ import jade.core.behaviours.ThreadedBehaviourFactory;
 
 import java.util.ArrayList;
 
-import tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour.CentralCommandBehaviour;
-import tw.edu.nctu.dcslab.WTACluster.Agent.Behaviour.CentralListenBehaviour;
+import tw.edu.nctu.dcslab.WTACluster.Behaviour.CentralCommandBehaviour;
+import tw.edu.nctu.dcslab.WTACluster.Behaviour.CentralListenBehaviour;
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 
 public class CentralAgent extends Agent {
