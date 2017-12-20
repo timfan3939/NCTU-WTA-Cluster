@@ -19,31 +19,25 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private ComputeAgent myAgent;
 	private ACLMessage message;
 
-	private boolean doneYet;
-	private int state;
+	private boolean doneYet = false;
+	private int state = 0;
 
-	private String result;
-	private long endtime;
-	private String problemID;
-	private ArrayList<PeerInfo> peerList;
+	private String result = "";
+	private long endtime = 10000;
+	private String problemID = "";
+	private ArrayList<PeerInfo> peerList = new ArrayList<PeerInfo>();
 
-	private ProblemInterface problem;
-	private HeuristicInterface algorithm;
+	private ProblemInterface problem = null;
+	private HeuristicInterface algorithm = null;
+	private String algorithmName = "Genetic";
+	private int population = 100;
 
-	private int iterCount;
+	private int iterCount = 0;
 	
 	public ComputeExecuteBehaviour( ComputeAgent agent, ACLMessage message ) {
 		super(agent);
 		this.myAgent = agent;
 		this.message = message;
-		this.doneYet = false;
-		this.state = 0;
-		this.result = "";
-		this.problem = null;
-		this.endtime = 1000;
-		this.algorithm = null;
-		this.problemID = "";
-		this.peerList = new ArrayList<PeerInfo>();
 	}
 	
 	@Override
@@ -69,19 +63,23 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private void parseProblem() {
 		String content = this.message.getContent();
 		String[] subContent = content.split("--\n");
-
-		for(String str:subContent) {
-			String[] subLine = str.split("\n");
+		
+		// Problem ID
+		this.problemID = subContent[0].split("\n")[1].trim();
+		
+		// Problem Information
+		switch( subContent[1].split("\n")[0] ) {
+			case "WTAProblem:":
+				this.problem = new WTAProblem(1, 1);
+				this.problem.DecodeProblem(subContent[1]);
+				break;
+			default:
+				result += "\nWrong Problem";
+				this.state = 2;
+				return;
 		}
 		
-		this.problemID = subContent[0].split("\n")[1].trim();
-
-		if ( subContent[1].startsWith("WTAProblem:") ) {
-			this.problem = new WTAProblem(1, 1);
-			this.problem.DecodeProblem(subContent[1]);
-			this.algorithm = new GeneticAlgorithm(this.problem, 100);
-		}
-
+		// Peer list
 		for ( String line : subContent[2].split("\n") ) {
 			if( line.isEmpty() )
 				continue;
@@ -91,28 +89,41 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			}
 			this.peerList.add( new PeerInfo( subLine[0], subLine[1] ) );
 		}
-
 		result += "\nPeers: " + this.peerList.size();
 
+		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
 			String[] subLine = line.split(":");
 			switch( subLine[0] ){
 				case "Time":
 					this.endtime = Long.parseLong(subLine[1]);
 					break;
+				case "Algorithm":
+					this.algorithmName = subLine[1];
+					break;
+				case "Population":
+					this.population = Integer.parseInt(subLine[1]);
+					break;
 				default:
 					break;
 			}
 		}
 
-
-
+		switch( this.algorithmName ) {
+			case "Genetic":
+				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
+				break;
+			default:
+				result += "\nNo such Algorithm Found: " + this.algorithmName;
+				this.state = 2;
+				return;
+		}
+		
 		this.endtime += System.currentTimeMillis();
-		this.iterCount = 0;
 
 
 		this.state = 1;
-		if( this.problem == null )
+		if( this.problem == null || this.algorithm == null)
 			this.state = 2;
 	}
 
@@ -129,12 +140,12 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	}
 
 	private void replyWithResult() {
-		result += " IterCount: " + iterCount;
+		result += "\nIterCount: " + iterCount;
 
 
 		ACLMessage reply = message.createReply();
 		reply.setPerformative(ACLMessage.CONFIRM);
-		reply.setContent("Result from " + myAgent.getName() + " of Problem " + this.problemID + " " + this.result);
+		reply.setContent("Result from " + myAgent.getName() + " of Problem " + this.problemID + "\n" + this.result);
 		this.myAgent.send( reply );
 
 		this.state = 3;
