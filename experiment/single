@@ -2,6 +2,7 @@ Problem:problem/WTAProblem.txt
 Algorithm:Genetic
 CrossoverRate:0.8
 MutationRate:0.4
+Time:10000
 --
 Problem:problem/WTAProblem.txt
 Algorithm:PSO
