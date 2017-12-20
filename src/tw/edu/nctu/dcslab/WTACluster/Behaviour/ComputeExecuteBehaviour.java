@@ -5,6 +5,10 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.ComputeAgent;
+import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
+import tw.edu.nctu.dcslab.WTACluster.Problem.WTAProblem;
+import tw.edu.nctu.dcslab.WTACluster.Algorithm.HeuristicInterface;
+import tw.edu.nctu.dcslab.WTACluster.Algorithm.GeneticAlgorithm;
 
 public class ComputeExecuteBehaviour extends Behaviour {
 	private static final long serialVersionUID = 20171219154629L;
@@ -16,6 +20,12 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private int state;
 
 	private String result;
+	private long starttime;
+
+	private ProblemInterface problem;
+	private HeuristicInterface algorithm;
+
+	private int iterCount;
 	
 	public ComputeExecuteBehaviour( ComputeAgent agent, ACLMessage message ) {
 		super(agent);
@@ -24,6 +34,9 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.doneYet = false;
 		this.state = 0;
 		this.result = "";
+		this.problem = null;
+		this.starttime = 0;
+		this.algorithm = null;
 	}
 	
 	@Override
@@ -56,15 +69,37 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			this.result += "" + subLine.length + " ";
 		}
 
+		if ( subContent[1].startsWith("WTAProblem:") ) {
+			this.problem = new WTAProblem(1, 1);
+			this.problem.DecodeProblem(subContent[1]);
+			this.algorithm = new GeneticAlgorithm(this.problem, 100);
+		}
+
+		this.starttime = System.currentTimeMillis();
+		this.iterCount = 0;
+
 
 		this.state = 1;
+		if( this.problem == null )
+			this.state = 2;
 	}
 
 	private void execution() {
-		this.state = 2;
+		if ( System.currentTimeMillis() - this.starttime > 10000 ) {
+			this.state = 2;
+			result += " " + this.problem.fitnessFunction(this.algorithm.GetBestSolution());
+			return;
+		}
+		for( int i=0; i<10; i++) {
+			this.algorithm.DoIteration();
+		}
+		iterCount += 10;
 	}
 
 	private void replyWithResult() {
+		result += " IterCount: " + iterCount;
+
+
 		ACLMessage reply = message.createReply();
 		reply.setPerformative(ACLMessage.CONFIRM);
 		reply.setContent("Result from " + myAgent.getName() + " of Problem " + "this.problemID" + " " + this.result);

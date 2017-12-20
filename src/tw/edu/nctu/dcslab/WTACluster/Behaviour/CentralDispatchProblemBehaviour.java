@@ -45,7 +45,7 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 
 		this.myAgent.send(msg);
 		System.out.println("----------\nNew problem: " + this.ID);
-		System.out.println(msg.getContent());
+		//System.out.println(msg.getContent());
 	}
 
 	private String generateContent() {
