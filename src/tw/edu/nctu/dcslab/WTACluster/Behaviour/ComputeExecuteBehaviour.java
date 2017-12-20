@@ -31,6 +31,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private HeuristicInterface algorithm = null;
 	private String algorithmName = "Genetic";
 	private int population = 100;
+	private String algorithmSetting = "";
 
 	private int iterCount = 0;
 	
@@ -105,6 +106,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 					this.population = Integer.parseInt(subLine[1]);
 					break;
 				default:
+					this.algorithmSetting += (this.algorithmSetting.isEmpty()?"":"\n") + line;
 					break;
 			}
 		}
@@ -112,6 +114,8 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		switch( this.algorithmName ) {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
+				this.algorithm.SetAlgorithmParameter( this.algorithmSetting );
+				result += "\n" + this.algorithmSetting;
 				break;
 			default:
 				result += "\nNo such Algorithm Found: " + this.algorithmName;

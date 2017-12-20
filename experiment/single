@@ -5,6 +5,7 @@ MutationRate:0.4
 Time:10000
 --
 Problem:problem/WTAProblem.txt
-Algorithm:PSO
-CrossoverRate:0.8
-MutationRate:0.4
+Algorithm:Genetic
+CrossoverRate:0.4
+MutationRate:0.8
+Time:10000
