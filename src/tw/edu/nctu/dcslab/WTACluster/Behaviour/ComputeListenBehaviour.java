@@ -21,7 +21,7 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 	public void action() {
 		ACLMessage msg = null;
 		try {
-			msg = myAgent.receive(MessageTemplate.MatchAll());
+			msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -50,7 +50,5 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 			default:
 				System.out.println(content);
 		}
-
-
 	}
 }

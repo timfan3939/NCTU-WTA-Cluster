@@ -157,10 +157,13 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			result += "\n" + this.problem.fitnessFunction(this.algorithm.GetBestSolution());
 			return;
 		}
-		for( int i=0; i<10; i++) {
-			this.algorithm.DoIteration();
-		}
-		iterCount += 10;
+		//for( int i=0; i<10; i++) {
+		//	this.algorithm.DoIteration();
+		//}
+		//iterCount += 10;
+
+		this.algorithm.DoIteration();
+		iterCount ++;
 	}
 
 	private void replyWithResult() {
