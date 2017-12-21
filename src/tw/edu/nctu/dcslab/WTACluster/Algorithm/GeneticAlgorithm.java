@@ -112,6 +112,14 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 	private void Selection() {
+		synchronized(this.exchangedSolution) {
+			for( int[] sol: this.exchangedSolution ) {
+				this.childSolutions.add( new Chromosomes( sol, this.problem ) );
+			}
+			this.exchangedSolution.clear();
+		}
+
+
 		solutions.clear();
 		UpdateChildSolutions();
 
@@ -159,9 +167,6 @@ public class GeneticAlgorithm extends HeuristicInterface {
 			for ( Chromosomes ch : childSolutions )
 				ch.UpdateValue();
 		}
-	}
-
-	public void AddSolutions(int[][] solutions) {
 	}
 
 	private class Chromosomes implements Comparable<Chromosomes> {

@@ -1,5 +1,8 @@
 package tw.edu.nctu.dcslab.WTACluster.Algorithm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 
 
@@ -18,8 +21,21 @@ public abstract class HeuristicInterface {
 
 	public abstract boolean SetAlgorithmParameter(String str);
 
+	protected ArrayList<int[]> exchangedSolution = new ArrayList<int[]>();
+
 	// Add Possible Solutions
-	public abstract void AddSolutions(int[][] solution);
+	public void AddSolutions(int[] solution) {
+		if( solution.length != this.solutionLength )
+			return;
+		synchronized(this.exchangedSolution) {
+			this.exchangedSolution.add(Arrays.copyOf(solution, this.solutionLength));
+		}
+		synchronized(this.bestSolution) {
+			if( this.problem.fitnessFunction(this.bestSolution) > this.problem.fitnessFunction(solution) ) {
+				this.bestSolution = Arrays.copyOf(solution, this.solutionLength);
+			}
+		}
+	}
 	
 	protected int solutionLength;
 	protected int solutionValueMax;

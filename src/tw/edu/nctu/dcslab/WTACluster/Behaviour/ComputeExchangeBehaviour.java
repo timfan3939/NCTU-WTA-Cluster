@@ -17,15 +17,15 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 
 	private ComputeAgent myAgent;
 
-	private ProblemInterface problem;
+	private String problemID;
 	private HeuristicInterface algorithm;
 	private ArrayList<PeerInfo> peerList;
 
-	public  ComputeExchangeBehaviour( ComputeAgent agent, long period, ProblemInterface problem, HeuristicInterface algorithm, ArrayList<PeerInfo> peerList ) {
+	public  ComputeExchangeBehaviour( ComputeAgent agent, long period, String problemID, HeuristicInterface algorithm, ArrayList<PeerInfo> peerList ) {
 		super(agent, period);
 
 		this.myAgent = agent;
-		this.problem = problem;
+		this.problemID = problemID;
 		this.algorithm = algorithm;
 		this.peerList = peerList;
 
@@ -46,9 +46,9 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 			msg.addReceiver( peer.getAID() );
 		}
 		
-		String content = "";
-		for( int s: sol ) {
-			content += " " + s;
+		String content = this.problemID + "\n" + sol[0];
+		for (int i=1; i<sol.length; i++) {
+			content += " " + sol[i];
 		}
 		content.trim();
 		msg.setContent( content );

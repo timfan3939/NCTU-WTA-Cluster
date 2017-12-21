@@ -49,6 +49,9 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 	public boolean done() {
 		this.doneYet = (this.resultList.size() == this.peerList.size());
+		if( this.doneYet ) {
+			System.out.println("Problem done");
+		}
 		return this.doneYet;
 	}
 
