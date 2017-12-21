@@ -21,7 +21,7 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 	public void action() {
 		ACLMessage msg = null;
 		try {
-			msg = myAgent.receive(MessageTemplate.MatchAll());
+			msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -45,15 +45,10 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 				myAgent.addBehaviour( new ShutdownPlatformBehaviour(myAgent) );
 				break;
 			case "Problem":
-				reply = msg.createReply();
-				reply.setContent("Result from " + myAgent.getName());
-				reply.setPerformative(ACLMessage.CONFIRM);
-				myAgent.send(reply);
+				this.myAgent.addBehaviour(new ComputeExecuteBehaviour( this.myAgent, msg ));
 				break;
 			default:
 				System.out.println(content);
 		}
-
-
 	}
 }

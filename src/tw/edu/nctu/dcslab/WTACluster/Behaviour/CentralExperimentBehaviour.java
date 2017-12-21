@@ -27,23 +27,35 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 		try {
 			BufferedReader fin = new BufferedReader( new FileReader(this.filename) );
 
-			String line;
-			while( (line = fin.readLine()) != null ) {
-				System.out.println(line);
-			}
-			fin.close();
-			
 			SequentialBehaviour seq = new SequentialBehaviour(this.myAgent);
+			String ID = "" + System.currentTimeMillis();
 
-			for( int i=0; i<5; i++ ) {
-				CentralDispatchProblemBehaviour dispatch = new CentralDispatchProblemBehaviour(this.myAgent);
-				CentralCollectResultBehaviour collect = new CentralCollectResultBehaviour(this.myAgent);
-				
-				seq.addSubBehaviour( dispatch );
-				seq.addSubBehaviour( collect );
+			String line;
+			String setting = "";
+			String problemFile = "";
+			int i = 0;
+			while( (line = fin.readLine()) != null ) {
+				if ( line.matches("--") ) {
+					seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
+					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent ) );
+					setting = "";
+					i++;
+				}
+				else if( line.startsWith("Problem:") ) {
+					problemFile = line.split(":")[1];
+				}
+				else {
+					setting += ( (setting.isEmpty()?"":"\n") + line );
+
+				}
 			}
+			if ( !problemFile.isEmpty() ) {
+				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
+				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent ) );
+			}
+
 			this.myAgent.addBehaviour(seq);
-		}
+		}	
 		catch( Exception e ) {
 			e.printStackTrace();
 		}
