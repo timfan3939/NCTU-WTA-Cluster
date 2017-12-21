@@ -106,7 +106,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			}
 			this.peerList.add( new PeerInfo( subLine[0], subLine[1] ) );
 		}
-		result += "\nPeers: " + this.peerList.size();
+		//result += "\nPeers: " + this.peerList.size();
 
 		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
@@ -156,7 +156,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		
 		this.endtime += System.currentTimeMillis();
 		
-		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problem, this.algorithm, this.peerList );
+		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm, this.peerList );
 		this.myAgent.addBehaviour( this.exchangeBehaviour );
 
 		this.state = 1;
@@ -167,7 +167,6 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private void execution() {
 		if ( System.currentTimeMillis() > this.endtime ) {
 			this.state = 2;
-			result += "\n" + this.problem.fitnessFunction(this.algorithm.GetBestSolution());
 			return;
 		}
 		this.algorithm.DoIteration();
@@ -177,19 +176,30 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private void tryReceive() {
 		ACLMessage msg = null;
 		while( ( msg = this.myAgent.receive( MessageTemplate.MatchPerformative( ACLMessage.PROPOSE ) ) ) != null ) {
-			if( this.lossRate < rand.nextDouble() )
-				msgCount++;
+			String[] line = msg.getContent().split("\n");
+			if(line[0].matches(this.problemID)) {
+				if( this.lossRate < rand.nextDouble() ) {
+					msgCount++;
+					String[] subLine = line[1].split(" ");
+					int[] sol = new int[subLine.length];
+					for( int i=0; i<subLine.length; i++ ) {
+						sol[i] = Integer.parseInt( subLine[i] );
+					}
+					this.algorithm.AddSolutions(sol);
+				}
+			}
 		}
 	}
 
 	private void replyWithResult() {
+		result += "\nResult: " + this.problem.fitnessFunction(this.algorithm.GetBestSolution());
 		result += "\nIterCount: " + iterCount;
 		result += "\nmsgCount: " + msgCount;
 
 
 		ACLMessage reply = message.createReply();
 		reply.setPerformative(ACLMessage.CONFIRM);
-		reply.setContent("Result from " + myAgent.getName() + " of Problem " + this.problemID + "\n" + this.result);
+		reply.setContent("Result from " + myAgent.getName() + " of Problem " + this.problemID + "" + this.result);
 		this.myAgent.send( reply );
 
 		this.state = 3;
