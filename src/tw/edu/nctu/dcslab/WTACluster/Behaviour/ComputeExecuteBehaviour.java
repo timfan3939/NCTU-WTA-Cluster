@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.ComputeAgent;
 import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
@@ -38,10 +39,13 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private long endtime = 10000;
 	private ArrayList<PeerInfo> peerList = new ArrayList<PeerInfo>();
 	private double lossRate = 0.0;
+	private long exchangeInterval = 500;
+	private ComputeExchangeBehaviour exchangeBehaviour = null;
 
 	// Other variables
 	private String result = "";
 	private int iterCount = 0;
+	private int msgCount = 0;
 	
 	public ComputeExecuteBehaviour( ComputeAgent agent, ACLMessage message ) {
 		super(agent);
@@ -53,6 +57,8 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	public void action() {
 		if ( doneYet )
 			return;
+
+		tryReceive();
 
 		switch( state ) {
 			case 0:
@@ -116,6 +122,9 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				case "LossRate":
 					this.lossRate = Double.parseDouble(subLine[1]);
 					break;
+				case "ExchangeInterval":
+					this.exchangeInterval = Long.parseLong(subLine[1]);
+					break;
 				default:
 					this.algorithmSetting += (this.algorithmSetting.isEmpty()?"":"\n") + line;
 					break;
@@ -144,7 +153,9 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		}
 		
 		this.endtime += System.currentTimeMillis();
-
+		
+		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problem, this.algorithm, this.peerList );
+		this.myAgent.addBehaviour( this.exchangeBehaviour );
 
 		this.state = 1;
 		if( this.problem == null || this.algorithm == null)
@@ -166,8 +177,16 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		iterCount ++;
 	}
 
+	private void tryReceive() {
+		ACLMessage msg = null;
+		while( ( msg = this.myAgent.receive( MessageTemplate.MatchPerformative( ACLMessage.PROPOSE ) ) ) != null ) {
+			msgCount++;
+		}
+	}
+
 	private void replyWithResult() {
 		result += "\nIterCount: " + iterCount;
+		result += "\nmsgCount: " + msgCount;
 
 
 		ACLMessage reply = message.createReply();
@@ -180,6 +199,10 @@ public class ComputeExecuteBehaviour extends Behaviour {
 
 	@Override
 	public boolean done() {
+		if(doneYet && this.exchangeBehaviour != null) {
+			this.exchangeBehaviour.stop();
+			this.exchangeBehaviour = null;
+		}
 		return doneYet;
 	}
 
