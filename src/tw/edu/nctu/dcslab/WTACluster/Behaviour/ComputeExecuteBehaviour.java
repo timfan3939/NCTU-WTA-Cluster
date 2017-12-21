@@ -15,24 +15,32 @@ import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 
 public class ComputeExecuteBehaviour extends Behaviour {
 	private static final long serialVersionUID = 20171219154629L;
-
+	
+	// The parent agent and the message sent from the center
 	private ComputeAgent myAgent;
 	private ACLMessage message;
 
+	// The state of this behaviour
 	private boolean doneYet = false;
 	private int state = 0;
 
-	private String result = "";
-	private long endtime = 10000;
-	private String problemID = "";
-	private ArrayList<PeerInfo> peerList = new ArrayList<PeerInfo>();
-
+	// Problem related variables
 	private ProblemInterface problem = null;
+	private String problemID = "";
+
+	// Algorithm related variables
 	private HeuristicInterface algorithm = null;
 	private String algorithmName = "Genetic";
 	private int population = 100;
 	private String algorithmSetting = "";
 
+	// Experiment environment related variables
+	private long endtime = 10000;
+	private ArrayList<PeerInfo> peerList = new ArrayList<PeerInfo>();
+	private double lossRate = 0.0;
+
+	// Other variables
+	private String result = "";
 	private int iterCount = 0;
 	
 	public ComputeExecuteBehaviour( ComputeAgent agent, ACLMessage message ) {
@@ -105,18 +113,30 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				case "Population":
 					this.population = Integer.parseInt(subLine[1]);
 					break;
+				case "LossRate":
+					this.lossRate = Double.parseDouble(subLine[1]);
+					break;
 				default:
 					this.algorithmSetting += (this.algorithmSetting.isEmpty()?"":"\n") + line;
 					break;
 			}
 		}
-
+		
+		// Setup after parsing
 		switch( this.algorithmName ) {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
 				this.algorithm.SetAlgorithmParameter( this.algorithmSetting );
 				result += "\n" + this.algorithmSetting;
 				break;
+			case "PSO":
+				result += "\n" + "PSO is not implemented yet";
+				this.state = 2;
+				return;
+			case "ABC":
+				result += "\n" + "ABC is not implemented yet";
+				this.state = 2;
+				return;
 			default:
 				result += "\nNo such Algorithm Found: " + this.algorithmName;
 				this.state = 2;
