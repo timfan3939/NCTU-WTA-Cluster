@@ -1,6 +1,7 @@
 package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -46,6 +47,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private String result = "";
 	private int iterCount = 0;
 	private int msgCount = 0;
+	private Random rand = new Random();
 	
 	public ComputeExecuteBehaviour( ComputeAgent agent, ACLMessage message ) {
 		super(agent);
@@ -136,7 +138,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
 				this.algorithm.SetAlgorithmParameter( this.algorithmSetting );
-				result += "\n" + this.algorithmSetting;
+				//result += "\n" + this.algorithmSetting;
 				break;
 			case "PSO":
 				result += "\n" + "PSO is not implemented yet";
@@ -168,11 +170,6 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			result += "\n" + this.problem.fitnessFunction(this.algorithm.GetBestSolution());
 			return;
 		}
-		//for( int i=0; i<10; i++) {
-		//	this.algorithm.DoIteration();
-		//}
-		//iterCount += 10;
-
 		this.algorithm.DoIteration();
 		iterCount ++;
 	}
@@ -180,7 +177,8 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private void tryReceive() {
 		ACLMessage msg = null;
 		while( ( msg = this.myAgent.receive( MessageTemplate.MatchPerformative( ACLMessage.PROPOSE ) ) ) != null ) {
-			msgCount++;
+			if( this.lossRate < rand.nextDouble() )
+				msgCount++;
 		}
 	}
 
@@ -201,6 +199,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	public boolean done() {
 		if(doneYet && this.exchangeBehaviour != null) {
 			this.exchangeBehaviour.stop();
+			this.myAgent.removeBehaviour( this.exchangeBehaviour );
 			this.exchangeBehaviour = null;
 		}
 		return doneYet;
