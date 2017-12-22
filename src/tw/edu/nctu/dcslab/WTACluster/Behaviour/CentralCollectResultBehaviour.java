@@ -22,7 +22,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		super(agent);
 		this.myAgent = agent;
 		this.doneYet = false;
-		this.peerList = this.myAgent.GetPeerList();
+		this.peerList = this.myAgent.getPeerList();
 		this.resultList = new ArrayList<String>();
 	}
 

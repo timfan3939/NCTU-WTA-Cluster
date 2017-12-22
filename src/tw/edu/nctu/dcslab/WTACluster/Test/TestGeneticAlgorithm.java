@@ -34,8 +34,8 @@ public class TestGeneticAlgorithm {
 
 		for( int round = 0; round < 10; round++ ) {
 		
-			problem.LoadProblemFromFile("WTAProblem.txt");
-			int solution[] = new int[numWeapon];
+			problem.loadProblemFromFile("problem/WTAProblem.txt");
+			double solution[] = new double[numWeapon];
 
 			for( int i=0; i<14; i++ ) 
 				//solution[i] = rand.nextInt(numTarget);
@@ -53,13 +53,13 @@ public class TestGeneticAlgorithm {
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 750000;
+		int iterationRound = 1000000;
 
 		for( int i=0; i<iterationRound; i++ ) {
-			genetic.DoIteration();
+			genetic.doIteration();
 
-			if ( bestValue > problem.fitnessFunction(genetic.GetBestSolution()) ) {
-				double tmp = problem.fitnessFunction(genetic.GetBestSolution());
+			if ( bestValue > problem.fitnessFunction(genetic.getBestSolution()) ) {
+				double tmp = problem.fitnessFunction(genetic.getBestSolution());
 				System.out.println("## " + i + ": \n\t" + bestValue + " -> \n\t" + tmp + " \n\tdiff: " + (tmp - bestValue));
 				bestValue = tmp;
 			}

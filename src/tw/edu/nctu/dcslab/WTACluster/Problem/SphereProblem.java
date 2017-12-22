@@ -8,35 +8,35 @@ public class SphereProblem implements ProblemInterface {
 		this.solutionLength = solutionLength;
 	}
 
-	public double fitnessFunction(int[] solution) {
+	public double fitnessFunction(double[] solution) {
 		double result = 0.0;
 
 		for (int i=0; i<solutionLength; i++) {
-			double num = ((double) solution[i]) - 5001.0;
+			double num = solution[i] - 5001.0;
 			result += num*num;
 		}
 		return result;
 	}
-	    public String EncodeProblem() {
+	    public String encodeProblem() {
 			return null;
 	    }       
 		
-		public void DecodeProblem(String str) {
+		public void decodeProblem(String str) {
 		}
 
 	public int getSolutionLength() {
 		return this.solutionLength;
 	}
 
-	public int getSolutionMax() {
-		return 10000;
+	public double getSolutionMax() {
+		return 10000.0;
 	}
 
-	public void LoadProblemFromFile(String path) {
+	public void loadProblemFromFile(String path) {
 		// TODO: maybe load problem from a file?
 	}
 
-	public void SaveProblemToFile(String path) {
+	public void saveProblemToFile(String path) {
 		// TODO:
 	}
 }

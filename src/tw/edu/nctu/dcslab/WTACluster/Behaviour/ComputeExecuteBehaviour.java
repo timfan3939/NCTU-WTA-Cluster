@@ -88,7 +88,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		switch( subContent[1].split("\n")[0] ) {
 			case "WTAProblem:":
 				this.problem = new WTAProblem(1, 1);
-				this.problem.DecodeProblem(subContent[1]);
+				this.problem.decodeProblem(subContent[1]);
 				break;
 			default:
 				result += "\nWrong Problem";
@@ -137,7 +137,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		switch( this.algorithmName ) {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
-				this.algorithm.SetAlgorithmParameter( this.algorithmSetting );
+				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
 				//result += "\n" + this.algorithmSetting;
 				break;
 			case "PSO":
@@ -169,7 +169,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			this.state = 2;
 			return;
 		}
-		this.algorithm.DoIteration();
+		this.algorithm.doIteration();
 		iterCount ++;
 	}
 
@@ -181,18 +181,18 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				if( this.lossRate < rand.nextDouble() ) {
 					msgCount++;
 					String[] subLine = line[1].split(" ");
-					int[] sol = new int[subLine.length];
+					double[] sol = new double[subLine.length];
 					for( int i=0; i<subLine.length; i++ ) {
-						sol[i] = Integer.parseInt( subLine[i] );
+						sol[i] = Double.parseDouble( subLine[i] );
 					}
-					this.algorithm.AddSolutions(sol);
+					this.algorithm.addSolutions(sol);
 				}
 			}
 		}
 	}
 
 	private void replyWithResult() {
-		result += "\nResult: " + this.problem.fitnessFunction(this.algorithm.GetBestSolution());
+		result += "\nResult: " + this.problem.fitnessFunction(this.algorithm.getBestSolution());
 		result += "\nIterCount: " + iterCount;
 		result += "\nmsgCount: " + msgCount;
 

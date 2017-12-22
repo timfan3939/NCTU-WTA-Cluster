@@ -11,20 +11,20 @@ public abstract class HeuristicInterface {
 	protected ProblemInterface problem;
 
 	// Ask do one iteration
-	public abstract void DoIteration();
+	public abstract void doIteration();
 	
-	protected int[] bestSolution;
+	protected double[] bestSolution;
 	// Get currently Best Solution
-	public int[] GetBestSolution() {
+	public double[] getBestSolution() {
 		return this.bestSolution;
 	}
 
-	public abstract boolean SetAlgorithmParameter(String str);
+	public abstract boolean setAlgorithmParameter(String str);
 
-	protected ArrayList<int[]> exchangedSolution = new ArrayList<int[]>();
+	protected ArrayList<double[]> exchangedSolution = new ArrayList<double[]>();
 
 	// Add Possible Solutions
-	public void AddSolutions(int[] solution) {
+	public void addSolutions(double[] solution) {
 		if( solution.length != this.solutionLength )
 			return;
 		synchronized(this.exchangedSolution) {
@@ -38,9 +38,9 @@ public abstract class HeuristicInterface {
 	}
 	
 	protected int solutionLength;
-	protected int solutionValueMax;
+	protected double solutionValueMax;
 	// Set Problem Interface
-	public void SetProblemInterface(ProblemInterface problem) {
+	public void setProblemInterface(ProblemInterface problem) {
 		this.problem = problem;
 		this.solutionLength = problem.getSolutionLength();
 		this.solutionValueMax = problem.getSolutionMax();

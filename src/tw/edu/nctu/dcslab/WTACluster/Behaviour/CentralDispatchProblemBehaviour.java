@@ -26,7 +26,7 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 	}
 
 	public void action() {
-		ArrayList<PeerInfo> peers = myAgent.GetPeerList();
+		ArrayList<PeerInfo> peers = myAgent.getPeerList();
 		if ( peers == null ) {
 			System.err.println("Please load peer list first.");
 			return;
@@ -56,13 +56,13 @@ public class CentralDispatchProblemBehaviour extends OneShotBehaviour {
 		
 		// WTA Problem
 		WTAProblem wta = new WTAProblem(14, 70);
-		wta.LoadProblemFromFile(this.problemFile);
-		content += wta.EncodeProblem() + "\n";
+		wta.loadProblemFromFile(this.problemFile);
+		content += wta.encodeProblem() + "\n";
 
 		content += "--" + "\n";
 
 		// Peer List
-		ArrayList<PeerInfo> peers = this.myAgent.GetPeerList();
+		ArrayList<PeerInfo> peers = this.myAgent.getPeerList();
 		for( PeerInfo peer:peers ) {
 			content += peer.name + " " + peer.ip + "\n";
 		}

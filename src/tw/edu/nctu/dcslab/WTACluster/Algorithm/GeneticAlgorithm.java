@@ -8,58 +8,54 @@ import java.util.Collections;
 import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 
 public class GeneticAlgorithm extends HeuristicInterface { 
-	private Random rand;
+	private Random rand = new Random();
 
 	private int population;
-	private double crossoverRate;
-	private double mutationRate;
+	private double crossoverRate = 0.8;
+	private double mutationRate = 0.4;
 	private ArrayList<Chromosomes> solutions;
 	private ArrayList<Chromosomes> childSolutions;
 
 	public GeneticAlgorithm( ProblemInterface problem, int population ) {
-		super.SetProblemInterface( problem );
-		this.rand = new Random();
+		super.setProblemInterface( problem );
 		this.population = population;
 
-		this.crossoverRate = 0.8;
-		this.mutationRate = 0.4;
-
-		this.GeneratePopulation();
+		this.generatePopulation();
 	}
 
-	public void GeneratePopulation() {
+	public void generatePopulation() {
 		solutions = new ArrayList<Chromosomes>();
 		int p_length = problem.getSolutionLength();
-		int p_value = problem.getSolutionMax();
+		double p_value = problem.getSolutionMax();
 
 		for ( int i=0; i<population; i++ ) {
-			int[] sol = new int[p_length];
+			double[] sol = new double[p_length];
 			for (int j=0; j<p_length; j++) {
-				sol[j] = rand.nextInt(p_value);
+				sol[j] = rand.nextDouble() * p_value;
 			}
 			solutions.add( new Chromosomes(sol, problem) );
 		}
 		childSolutions = new ArrayList<Chromosomes>();
 	}
 
-	public void DoIteration() {
-		Duplicate();
-		Crossover();
-		Mutation();
-		Selection();
+	public void doIteration() {
+		duplicate();
+		crossover();
+		mutation();
+		selection();
 
-		UpdateLocalBestSolution();
+		updateLocalBestSolution();
 
 		childSolutions.clear();
 	}
 
-	private void Duplicate() {
+	private void duplicate() {
 		for ( Chromosomes ch : solutions ) {
 			childSolutions.add( new Chromosomes( ch.solution, problem ) );
 		}
 	}
 
-	private void Crossover() {
+	private void crossover() {
 		int crossoverRound = population/2;
 
 		for ( int round=0; round<crossoverRound; round++ ) {
@@ -78,8 +74,8 @@ public class GeneticAlgorithm extends HeuristicInterface {
 				crossoverPosition = rand.nextInt(solutionLength);
 			} while (crossoverPosition == 0);
 
-			int[] ch1 = new int[solutionLength];
-			int[] ch2 = new int[solutionLength];
+			double[] ch1 = new double[solutionLength];
+			double[] ch2 = new double[solutionLength];
 
 			for ( int i=0; i<solutionLength; i++) {
 				if ( i == crossoverPosition ) {
@@ -95,14 +91,14 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		}
 	}
 
-	private void Mutation() {
+	private void mutation() {
 		for ( Chromosomes pa : solutions ) {
 			if ( rand.nextDouble() <= mutationRate ) {
-				int[] ch = Arrays.copyOf(pa.solution, solutionLength);
+				double[] ch = Arrays.copyOf(pa.solution, solutionLength);
 				int mutatePos = rand.nextInt(solutionLength);
-				int value = 0;
+				double value = 0;
 				do {
-					value = rand.nextInt(solutionValueMax);
+					value = rand.nextDouble() * solutionValueMax;
 				} while ( ch[mutatePos] == value );
 
 				ch[mutatePos] = value;
@@ -111,9 +107,9 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		}
 	}
 
-	private void Selection() {
+	private void selection() {
 		synchronized(this.exchangedSolution) {
-			for( int[] sol: this.exchangedSolution ) {
+			for( double[] sol: this.exchangedSolution ) {
 				this.childSolutions.add( new Chromosomes( sol, this.problem ) );
 			}
 			this.exchangedSolution.clear();
@@ -121,7 +117,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 
 		solutions.clear();
-		UpdateChildSolutions();
+		updateChildSolutions();
 
 		double totalValue = 0.0;
 		double[] value = new double[childSolutions.size()];
@@ -143,8 +139,8 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 
-	public void UpdateLocalBestSolution() {
-		UpdateSolutions();
+	public void updateLocalBestSolution() {
+		updateSolutions();
 		Collections.sort(solutions);
 
 		if(bestSolution == null) {
@@ -157,36 +153,36 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		}
 	}
 
-	public void UpdateSolutions() {
+	public void updateSolutions() {
 		for ( Chromosomes ch : solutions )
-			ch.UpdateValue();
+			ch.updateValue();
 	}
 
-	public void UpdateChildSolutions() {
+	public void updateChildSolutions() {
 		if ( childSolutions != null ) {
 			for ( Chromosomes ch : childSolutions )
-				ch.UpdateValue();
+				ch.updateValue();
 		}
 	}
 
 	private class Chromosomes implements Comparable<Chromosomes> {
 		public double value;
-		public int[] solution;
+		public double[] solution;
 		ProblemInterface problem;
 
-		public Chromosomes ( int[] solution, ProblemInterface problem ) {
+		public Chromosomes ( double[] solution, ProblemInterface problem ) {
 			this.problem = problem;
 			this.solution = Arrays.copyOf(solution, solution.length);
 		}
 
-		public void UpdateValue() {
+		public void updateValue() {
 			value = problem.fitnessFunction(solution);
 		}
 		
 		@Override
 		public int compareTo( Chromosomes ch ) {
-			this.UpdateValue();
-			ch.UpdateValue();
+			this.updateValue();
+			ch.updateValue();
 			
 			if(this.value > ch.value)
 				return 1;
@@ -207,7 +203,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 	@Override
-	public boolean SetAlgorithmParameter(String str) {
+	public boolean setAlgorithmParameter(String str) {
 		String[] line = str.split("\n");
 		String[] subline = null;
 
