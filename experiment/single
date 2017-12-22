@@ -2,12 +2,12 @@ Problem:problem/WTAProblem.txt
 Algorithm:Genetic
 CrossoverRate:0.8
 MutationRate:0.4
-Time:30000
+Time:10000
 LossRate:0.9
 --
 Problem:problem/WTAProblem.txt
 Algorithm:Genetic
 CrossoverRate:0.4
 MutationRate:0.8
-Time:30000
+Time:10000
 LossRate:0.1

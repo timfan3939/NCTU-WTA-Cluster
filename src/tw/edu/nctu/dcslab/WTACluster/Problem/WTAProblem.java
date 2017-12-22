@@ -40,13 +40,13 @@ public class WTAProblem implements ProblemInterface {
 		}
 	}
 
-	public double fitnessFunction(int[] solution) {
+	public double fitnessFunction(double[] solution) {
 		double result = 0.0;
 
 		for (int j=0; j<numTarget; j++) {
 			double remainProbability = 1.0;
 			for (int i=0; i<numWeapon; i++) {
-				if (solution[i] == j)
+				if ((int)solution[i] == j)
 					remainProbability *= (1-hitProbability[i][j]);
 			}
 			result += targetWeight[j] * remainProbability;
@@ -55,7 +55,7 @@ public class WTAProblem implements ProblemInterface {
 		return result;
 	}
 	
-	public String EncodeProblem() {
+	public String encodeProblem() {
 		String str = "WTAProblem:\n";
 		str += "Weapon:" + this.numWeapon + "\n";
 		str += "Target:" + this.numTarget + "\n";
@@ -75,7 +75,7 @@ public class WTAProblem implements ProblemInterface {
 		return str;
 	}
 
-	public void DecodeProblem(String str) {
+	public void decodeProblem(String str) {
 		int lineNum = 0;
 		String[] line = str.split("\n");
 		String[] subLine;
@@ -156,19 +156,19 @@ public class WTAProblem implements ProblemInterface {
 		return this.numWeapon;
 	}
 
-	public int getSolutionMax() {
-		return this.numTarget;
+	public double getSolutionMax() {
+		return (double) this.numTarget;
 	}
 
 	public String toString() {
-		String str = this.EncodeProblem();
+		String str = this.encodeProblem();
 		return str;
 	}
 
-	public void SaveProblemToFile(String path) {
+	public void saveProblemToFile(String path) {
 		try {
 			FileOutputStream fout = new FileOutputStream( path );
-			fout.write(this.EncodeProblem().getBytes());
+			fout.write(this.encodeProblem().getBytes());
 			fout.flush();
 			fout.close();
 		}
@@ -182,7 +182,7 @@ public class WTAProblem implements ProblemInterface {
 		}
 	}
 
-	public void LoadProblemFromFile(String path) {
+	public void loadProblemFromFile(String path) {
 		String content = "";
 		try {
 			BufferedReader fin = new BufferedReader( new FileReader(path) );
@@ -202,6 +202,6 @@ public class WTAProblem implements ProblemInterface {
 			System.err.println("I/O Error with " + path);
 			e.printStackTrace();
 		}
-		this.DecodeProblem(content);
+		this.decodeProblem(content);
 	}
 }

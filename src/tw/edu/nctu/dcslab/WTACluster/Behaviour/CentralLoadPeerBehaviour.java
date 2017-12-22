@@ -46,6 +46,6 @@ public class CentralLoadPeerBehaviour extends OneShotBehaviour {
 			System.err.println("Error loading file: " + defaultPath);
 			e.printStackTrace();
 		}
-		myAgent.SetPeerList(peers);
+		myAgent.setPeerList(peers);
 	}
 }

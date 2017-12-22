@@ -38,7 +38,7 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 			return;
 
 		// Get Best Answer
-		int[] sol = this.algorithm.GetBestSolution();
+		double[] sol = this.algorithm.getBestSolution();
 
 		// Send to Peers
 		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
@@ -48,7 +48,7 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 		
 		String content = this.problemID + "\n" + sol[0];
 		for (int i=1; i<sol.length; i++) {
-			content += " " + sol[i];
+			content += " " + String.format("%.2f", sol[i]);
 		}
 		content.trim();
 		msg.setContent( content );

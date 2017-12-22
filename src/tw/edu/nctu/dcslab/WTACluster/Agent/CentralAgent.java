@@ -26,14 +26,14 @@ public class CentralAgent extends Agent {
 		this.peerList = null;
 	}
 
-	public void SetPeerList( ArrayList<PeerInfo> peers ) {
+	public void setPeerList( ArrayList<PeerInfo> peers ) {
 		this.peerList = peers;
 		for( PeerInfo peer : this.peerList ) {
 			System.out.println( "Found peer: " + peer );
 		}
 	}
 
-	public ArrayList<PeerInfo> GetPeerList() {
+	public ArrayList<PeerInfo> getPeerList() {
 		return this.peerList;
 	}
 

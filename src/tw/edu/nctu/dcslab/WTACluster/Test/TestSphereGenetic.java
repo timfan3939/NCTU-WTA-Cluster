@@ -22,7 +22,7 @@ public class TestSphereGenetic {
 
 
 		for( int round = 0; round < 10; round++ ) {
-			int solution[] = new int[numLength];
+			double solution[] = new double[numLength];
 
 			for( int i=0; i<14; i++ ) 
 				solution[i] = rand.nextInt(solMax);
@@ -39,10 +39,10 @@ public class TestSphereGenetic {
 		int iterationRound = 2000000;
 
 		for( int i=0; i<iterationRound; i++ ) {
-			genetic.DoIteration();
+			genetic.doIteration();
 
-			if ( bestValue > problem.fitnessFunction(genetic.GetBestSolution()) ) {
-				double tmp = problem.fitnessFunction(genetic.GetBestSolution());
+			if ( bestValue > problem.fitnessFunction(genetic.getBestSolution()) ) {
+				double tmp = problem.fitnessFunction(genetic.getBestSolution());
 				System.out.println("~~" + i + ": " + bestValue + " diff: " + (tmp - bestValue));
 				bestValue = tmp;
 			}

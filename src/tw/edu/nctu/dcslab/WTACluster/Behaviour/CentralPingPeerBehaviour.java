@@ -25,7 +25,7 @@ public class CentralPingPeerBehaviour extends OneShotBehaviour {
 
 	@Override
 	public void action() {
-		ArrayList<PeerInfo> peers = myAgent.GetPeerList();
+		ArrayList<PeerInfo> peers = myAgent.getPeerList();
 		
 		if ( peers == null ) {
 			System.out.println("Please load peer list first");

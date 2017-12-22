@@ -2,17 +2,17 @@ package tw.edu.nctu.dcslab.WTACluster.Problem;
 
 public interface ProblemInterface {
 	// Provide a fitness function calculatio
-	public double fitnessFunction(int [] solution);
+	public double fitnessFunction(double[] solution);
 
 	// The length of the solution array
 	public int getSolutionLength();
 	// The max integer value of the element in a solution
-	public int getSolutionMax();
+	public double getSolutionMax();
 	
 	// Encode and decode a problem
-	public String EncodeProblem();
-	public void DecodeProblem(String str);
+	public String encodeProblem();
+	public void decodeProblem(String str);
 
-	public void LoadProblemFromFile(String path);
-	public void SaveProblemToFile(String path);
+	public void loadProblemFromFile(String path);
+	public void saveProblemToFile(String path);
 }
