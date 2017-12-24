@@ -1,6 +1,7 @@
 package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import jade.core.Agent;
@@ -112,7 +113,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			}
 			this.peerList.add( new PeerInfo( subLine[0], subLine[1] ) );
 		}
-		this.addResultMsg( "PeerCount:" + this.peerList.size() );
+		//this.addResultMsg( "PeerCount:" + this.peerList.size() );
 
 		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
@@ -144,7 +145,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
 				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
-				this.addResultMsg( this.algorithmSetting );
+				//this.addResultMsg( this.algorithmSetting );
 				break;
 			case "PSO":
 				this.addResultMsg( "PSO is not implemented yet" );
@@ -198,6 +199,12 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	}
 
 	private void replyWithResult() {
+		double[] sol = this.algorithm.getBestSolution();
+		int[] isol = new int[ sol.length ];
+		for( int i=0; i<sol.length; i++ ) {
+			isol[i] = (int) sol[i];
+		}
+		this.addResultMsg( "Sol:" + Arrays.toString( isol ) );
 		this.addResultMsg( "Result:" + this.problem.fitnessFunction(this.algorithm.getBestSolution()) );
 		this.addResultMsg( "IterCount:" + this.iterCount );
 		this.addResultMsg( "MsgCount:" + this.msgCount );
