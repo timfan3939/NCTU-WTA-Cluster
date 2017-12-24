@@ -28,7 +28,7 @@ public abstract class HeuristicInterface {
 		if( solution.length != this.solutionLength )
 			return;
 		synchronized(this.exchangedSolution) {
-			this.exchangedSolution.add(Arrays.copyOf(solution, this.solutionLength));
+			this.exchangedSolution.add( solution.clone() );
 		}
 		synchronized(this.bestSolution) {
 			if( this.problem.fitnessFunction(this.bestSolution) > this.problem.fitnessFunction(solution) ) {

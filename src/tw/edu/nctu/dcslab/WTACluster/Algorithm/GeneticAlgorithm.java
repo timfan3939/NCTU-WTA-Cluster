@@ -149,7 +149,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		}
 		
 		if( problem.fitnessFunction(bestSolution) > solutions.get(0).value ) {
-			bestSolution = solutions.get(0).solution;
+			bestSolution = solutions.get(0).solution.clone();
 		}
 	}
 
@@ -190,10 +190,10 @@ public class GeneticAlgorithm extends HeuristicInterface {
 				return -1;
 			else {
 				for( int i=0; i<this.solution.length; i++ ) {
-					if ( this.solution[i] > ch.solution[i] ) {
+					if ( (int)this.solution[i] > (int)ch.solution[i] ) {
 						return 1;
 					}
-					else if (this.solution[i] < ch.solution[i]) {
+					else if ( (int)this.solution[i] < (int)ch.solution[i] ) {
 						return -1;
 					}
 				}

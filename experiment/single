@@ -19,7 +19,7 @@ Algorithm:Genetic
 CrossoverRate:0.8
 MutationRate:0.4
 Time:10000
-LossRate:0.0
+LossRate:0.3
 Population:100
 --
 Problem:problem/WTAProblem.txt
@@ -27,7 +27,7 @@ Algorithm:Genetic
 CrossoverRate:0.8
 MutationRate:0.4
 Time:10000
-LossRate:0.0
+LossRate:0.6
 Population:100
 --
 Problem:problem/WTAProblem.txt
@@ -35,5 +35,5 @@ Algorithm:Genetic
 CrossoverRate:0.8
 MutationRate:0.4
 Time:10000
-LossRate:0.0
+LossRate:0.9
 Population:100
