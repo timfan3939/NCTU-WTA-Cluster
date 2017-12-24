@@ -24,3 +24,5 @@ hs_err_pid*
 # Jade automatic generated file
 APDescription.txt
 MTPs-Main-Container.txt
+
+log/

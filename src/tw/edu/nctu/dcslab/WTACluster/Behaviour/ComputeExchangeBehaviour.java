@@ -1,6 +1,7 @@
 package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -20,6 +21,8 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 	private String problemID;
 	private HeuristicInterface algorithm;
 	private ArrayList<PeerInfo> peerList;
+	private int sentCount = 0;
+	private String sentResult = "";
 
 	public  ComputeExchangeBehaviour( ComputeAgent agent, long period, String problemID, HeuristicInterface algorithm, ArrayList<PeerInfo> peerList ) {
 		super(agent, period);
@@ -48,11 +51,18 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 		
 		String content = this.problemID + "\n" + sol[0];
 		for (int i=1; i<sol.length; i++) {
-			content += " " + String.format("%.2f", sol[i]);
+			content += String.format(" %f", sol[i]);
 		}
-		content.trim();
 		msg.setContent( content );
 
 		this.myAgent.send( msg );
+		this.sentCount ++;
+
+
+
+	}
+
+	public int getSentCount() {
+		return this.sentCount;
 	}
 }

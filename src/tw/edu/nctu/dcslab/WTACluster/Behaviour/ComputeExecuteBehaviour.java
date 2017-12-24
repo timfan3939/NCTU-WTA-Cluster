@@ -1,6 +1,7 @@
 package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import jade.core.Agent;
@@ -60,14 +61,19 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		if ( doneYet )
 			return;
 
-		tryReceive();
-
 		switch( state ) {
 			case 0:
 				parseProblem();
 				break;
 			case 1:
-				execution();
+			    if ( System.currentTimeMillis() > this.endtime ) {
+					this.state = 2;
+					replyWithResult();
+					return;
+				}
+				tryReceive();
+				for( int i=0; i<100; i++)
+					execution();
 				break;
 			case 2:
 				replyWithResult();
@@ -77,12 +83,18 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		}
 	}
 
+	private void addResultMsg( String msg ) {
+		this.result += (this.result.isEmpty()?"":"\n") + msg;
+	}
+
 	private void parseProblem() {
 		String content = this.message.getContent();
 		String[] subContent = content.split("--\n");
 		
 		// Problem ID
 		this.problemID = subContent[0].split("\n")[1].trim();
+		this.addResultMsg( "ProblemID:" + this.problemID );
+		this.addResultMsg( "Sender:" + this.myAgent.getLocalName() );
 		
 		// Problem Information
 		switch( subContent[1].split("\n")[0] ) {
@@ -91,7 +103,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				this.problem.decodeProblem(subContent[1]);
 				break;
 			default:
-				result += "\nWrong Problem";
+				this.addResultMsg( "Wrong Problem" );
 				this.state = 2;
 				return;
 		}
@@ -106,7 +118,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			}
 			this.peerList.add( new PeerInfo( subLine[0], subLine[1] ) );
 		}
-		//result += "\nPeers: " + this.peerList.size();
+		//this.addResultMsg( "PeerCount:" + this.peerList.size() );
 
 		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
@@ -138,18 +150,18 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
 				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
-				//result += "\n" + this.algorithmSetting;
+				//this.addResultMsg( this.algorithmSetting );
 				break;
 			case "PSO":
-				result += "\n" + "PSO is not implemented yet";
+				this.addResultMsg( "PSO is not implemented yet" );
 				this.state = 2;
 				return;
 			case "ABC":
-				result += "\n" + "ABC is not implemented yet";
+				this.addResultMsg( "ABC is not implemented yet" );
 				this.state = 2;
 				return;
 			default:
-				result += "\nNo such Algorithm Found: " + this.algorithmName;
+				this.addResultMsg( "No such Algorithm Found: " + this.algorithmName );
 				this.state = 2;
 				return;
 		}
@@ -157,6 +169,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.endtime += System.currentTimeMillis();
 		
 		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm, this.peerList );
+		//this.myAgent.addBehaviour( this.myAgent.tbf.wrap( this.exchangeBehaviour ) );
 		this.myAgent.addBehaviour( this.exchangeBehaviour );
 
 		this.state = 1;
@@ -165,10 +178,6 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	}
 
 	private void execution() {
-		if ( System.currentTimeMillis() > this.endtime ) {
-			this.state = 2;
-			return;
-		}
 		this.algorithm.doIteration();
 		iterCount ++;
 	}
@@ -192,14 +201,21 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	}
 
 	private void replyWithResult() {
-		result += "\nResult: " + this.problem.fitnessFunction(this.algorithm.getBestSolution());
-		result += "\nIterCount: " + iterCount;
-		result += "\nmsgCount: " + msgCount;
+		double[] sol = this.algorithm.getBestSolution();
+		int[] isol = new int[ sol.length ];
+		for( int i=0; i<sol.length; i++ ) {
+			isol[i] = (int) sol[i];
+		}
+		this.addResultMsg( "Sol:" + Arrays.toString( isol ) );
+		this.addResultMsg( "Result:" + this.problem.fitnessFunction(this.algorithm.getBestSolution()) );
+		this.addResultMsg( "IterCount:" + this.iterCount );
+		this.addResultMsg( "SentCount:" + this.exchangeBehaviour.getSentCount() );
+		this.addResultMsg( "RecvCount:" + this.msgCount );
 
 
 		ACLMessage reply = message.createReply();
 		reply.setPerformative(ACLMessage.CONFIRM);
-		reply.setContent("Result from " + myAgent.getName() + " of Problem " + this.problemID + "" + this.result);
+		reply.setContent( this.result );
 		this.myAgent.send( reply );
 
 		this.state = 3;

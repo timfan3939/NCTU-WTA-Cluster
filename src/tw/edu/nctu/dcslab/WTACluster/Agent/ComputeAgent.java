@@ -7,7 +7,7 @@ import tw.edu.nctu.dcslab.WTACluster.Behaviour.ComputeListenBehaviour;
 
 public class ComputeAgent extends Agent {
 	private static final long serialVersionUID = 20171126144125L;
-	ThreadedBehaviourFactory tbf;
+	public ThreadedBehaviourFactory tbf;
 
 	@Override
 	protected void setup() {

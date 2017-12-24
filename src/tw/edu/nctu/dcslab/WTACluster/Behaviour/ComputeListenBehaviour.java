@@ -42,7 +42,7 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 				myAgent.send(reply);
 				break;
 			case "quit":
-				myAgent.addBehaviour( new ShutdownPlatformBehaviour(myAgent) );
+				myAgent.addBehaviour( new ShutdownPlatformBehaviour( this.myAgent ) );
 				break;
 			case "Problem":
 				this.myAgent.addBehaviour(new ComputeExecuteBehaviour( this.myAgent, msg ));
