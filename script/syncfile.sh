@@ -6,8 +6,8 @@ do
 	echo "=========="
 	echo $name
 	echo "=========="
-	echo "1. scp java files"
-	cmd="scp -r src ${name}:/home/timfan3939/NCTU-WTA-Cluster/"
+	echo "1. rsync java files"
+	cmd="rsync -r --delete src ${name}:/home/timfan3939/NCTU-WTA-Cluster/"
 	eval $cmd
 	echo "...Done"
 	echo "----------"
@@ -18,8 +18,8 @@ do
 	echo "...Done"
 	echo "----------"
 
-	echo "3. scp script"
-	cmd="scp -r script ${name}:/home/timfan3939/NCTU-WTA-Cluster/"
+	echo "3. rsync script"
+	cmd="rsync -r --delete script ${name}:/home/timfan3939/NCTU-WTA-Cluster/"
 	eval $cmd
 	echo "...Done"
 	echo "----------"
