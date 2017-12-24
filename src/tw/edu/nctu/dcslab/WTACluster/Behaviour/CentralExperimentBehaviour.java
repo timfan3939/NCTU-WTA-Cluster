@@ -37,7 +37,7 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 			while( (line = fin.readLine()) != null ) {
 				if ( line.matches("--") ) {
 					seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
-					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent ) );
+					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent , ID + "_" + i) );
 					setting = "";
 					i++;
 				}
@@ -51,7 +51,7 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 			}
 			if ( !problemFile.isEmpty() ) {
 				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
-				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent ) );
+				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent, ID + "_" + i ) );
 			}
 
 			this.myAgent.addBehaviour(seq);

@@ -19,11 +19,13 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	private boolean doneYet = false;
 	private ArrayList<PeerInfo> peerList;
 	private TreeMap<String, String> resultList = new TreeMap<String, String>();
+	private String problemID;
 
-	public CentralCollectResultBehaviour( CentralAgent agent ) {
+	public CentralCollectResultBehaviour( CentralAgent agent, String problemID ) {
 		super(agent);
 		this.myAgent = agent;
 		this.peerList = this.myAgent.getPeerList();
+		this.problemID = problemID;
 	}
 
 	@Override
@@ -39,11 +41,12 @@ public class CentralCollectResultBehaviour extends Behaviour {
 			block();
 			return;
 		}
-		
-		String senderName = msg.getSender().getName();
-		if( senderName.startsWith("weapon") ) {
-			String content = msg.getContent();
-			this.resultList.put( senderName, content );
+
+		String content = msg.getContent();
+		String[] line = content.split("\n");
+
+		if( line[0].split(":")[1].matches(this.problemID) ) {
+			this.resultList.put( line[1], content );
 		}
 	}
 

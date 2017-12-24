@@ -77,12 +77,18 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		}
 	}
 
+	private void addResultMsg( String msg ) {
+		this.result += (this.result.isEmpty()?"":"\n") + msg;
+	}
+
 	private void parseProblem() {
 		String content = this.message.getContent();
 		String[] subContent = content.split("--\n");
 		
 		// Problem ID
 		this.problemID = subContent[0].split("\n")[1].trim();
+		this.addResultMsg( "ProblemID:" + this.problemID );
+		this.addResultMsg( "Sender:" + this.myAgent.getLocalName() );
 		
 		// Problem Information
 		switch( subContent[1].split("\n")[0] ) {
@@ -91,7 +97,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				this.problem.decodeProblem(subContent[1]);
 				break;
 			default:
-				result += "\nWrong Problem";
+				this.addResultMsg( "Wrong Problem" );
 				this.state = 2;
 				return;
 		}
@@ -106,7 +112,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			}
 			this.peerList.add( new PeerInfo( subLine[0], subLine[1] ) );
 		}
-		//result += "\nPeers: " + this.peerList.size();
+		this.addResultMsg( "PeerCount:" + this.peerList.size() );
 
 		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
@@ -138,18 +144,18 @@ public class ComputeExecuteBehaviour extends Behaviour {
 			case "Genetic":
 				this.algorithm = new GeneticAlgorithm( this.problem, this.population );
 				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
-				//result += "\n" + this.algorithmSetting;
+				this.addResultMsg( this.algorithmSetting );
 				break;
 			case "PSO":
-				result += "\n" + "PSO is not implemented yet";
+				this.addResultMsg( "PSO is not implemented yet" );
 				this.state = 2;
 				return;
 			case "ABC":
-				result += "\n" + "ABC is not implemented yet";
+				this.addResultMsg( "ABC is not implemented yet" );
 				this.state = 2;
 				return;
 			default:
-				result += "\nNo such Algorithm Found: " + this.algorithmName;
+				this.addResultMsg( "No such Algorithm Found: " + this.algorithmName );
 				this.state = 2;
 				return;
 		}
@@ -192,14 +198,14 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	}
 
 	private void replyWithResult() {
-		result += "\nResult: " + this.problem.fitnessFunction(this.algorithm.getBestSolution());
-		result += "\nIterCount: " + iterCount;
-		result += "\nmsgCount: " + msgCount;
+		this.addResultMsg( "Result:" + this.problem.fitnessFunction(this.algorithm.getBestSolution()) );
+		this.addResultMsg( "IterCount:" + this.iterCount );
+		this.addResultMsg( "MsgCount:" + this.msgCount );
 
 
 		ACLMessage reply = message.createReply();
 		reply.setPerformative(ACLMessage.CONFIRM);
-		reply.setContent("Result from " + myAgent.getName() + " of Problem " + this.problemID + "" + this.result);
+		reply.setContent( this.result );
 		this.myAgent.send( reply );
 
 		this.state = 3;
