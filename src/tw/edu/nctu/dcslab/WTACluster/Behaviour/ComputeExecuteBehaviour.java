@@ -210,6 +210,8 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.addResultMsg( "Result:" + this.problem.fitnessFunction(this.algorithm.getBestSolution()) );
 		this.addResultMsg( "IterCount:" + this.iterCount );
 		this.addResultMsg( "SentCount:" + this.exchangeBehaviour.getSentCount() );
+		this.addResultMsg( "SentResult:" );
+		this.addResultMsg( this.exchangeBehaviour.getSentResult() );
 		this.addResultMsg( "RecvCount:" + this.msgCount );
 
 

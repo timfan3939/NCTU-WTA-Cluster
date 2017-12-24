@@ -23,6 +23,7 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 	private ArrayList<PeerInfo> peerList;
 	private int sentCount = 0;
 	private String sentResult = "";
+	private long startTime = 0;
 
 	public  ComputeExchangeBehaviour( ComputeAgent agent, long period, String problemID, HeuristicInterface algorithm, ArrayList<PeerInfo> peerList ) {
 		super(agent, period);
@@ -31,12 +32,15 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 		this.problemID = problemID;
 		this.algorithm = algorithm;
 		this.peerList = peerList;
+		this.startTime = System.currentTimeMillis();
 
 		this.setFixedPeriod( true );
 	}
 
 	@Override
 	public void onTick() {
+		long now = System.currentTimeMillis();
+		
 		if( this.peerList.size() == 0 )
 			return;
 
@@ -58,11 +62,17 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 		this.myAgent.send( msg );
 		this.sentCount ++;
 
-
-
+		//this.sentResult += sentCount + "\t";
+		this.sentResult += this.getTickCount() + "\t";
+		this.sentResult += (now - this.startTime) + "\t";
+		this.sentResult += content + "\n" ;
 	}
 
 	public int getSentCount() {
 		return this.sentCount;
+	}
+
+	public String getSentResult() {
+		return this.sentResult;
 	}
 }
