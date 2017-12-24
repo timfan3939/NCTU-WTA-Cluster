@@ -8,6 +8,8 @@ import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Map;
+import java.io.FileWriter;
+
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent;
@@ -30,6 +32,14 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 	@Override
 	public void action() {
+		if( this.doneYet )
+			return;
+		if( this.resultList.size() == this.peerList.size() ) {
+			this.writeResult();
+			this.doneYet = true;
+			return;
+		}
+
 		ACLMessage msg = null;
 		try {
 			msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.CONFIRM));
@@ -50,15 +60,25 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		}
 	}
 
-	public boolean done() {
-		this.doneYet = (this.resultList.size() == this.peerList.size());
-		if( this.doneYet ) {
-			for (Map.Entry<String, String> entry : this.resultList.entrySet()) {
-				System.out.println(entry.getValue());
-				System.out.println("---");
-			}
-			System.out.println("Problem done");
+	private void writeResult() {
+		System.out.println("Almost finish");
+		String result = "";
+		for( Map.Entry<String, String> entry : this.resultList.entrySet() ) {
+			result += entry.getValue() + "\n---\n";
 		}
+		try {
+			FileWriter writer = new FileWriter( "log/" + this.problemID + ".txt" );
+			writer.write(result);
+			writer.close();
+		}
+		catch( Exception e ) {
+			e.printStackTrace();
+		}
+	}
+
+	public boolean done() {
+		if( doneYet )
+			System.out.println("Problem done");
 		return this.doneYet;
 	}
 

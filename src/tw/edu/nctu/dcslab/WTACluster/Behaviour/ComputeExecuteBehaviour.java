@@ -209,7 +209,8 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.addResultMsg( "Sol:" + Arrays.toString( isol ) );
 		this.addResultMsg( "Result:" + this.problem.fitnessFunction(this.algorithm.getBestSolution()) );
 		this.addResultMsg( "IterCount:" + this.iterCount );
-		this.addResultMsg( "MsgCount:" + this.msgCount );
+		this.addResultMsg( "SentCount:" + this.exchangeBehaviour.getSentCount() );
+		this.addResultMsg( "RecvCount:" + this.msgCount );
 
 
 		ACLMessage reply = message.createReply();
