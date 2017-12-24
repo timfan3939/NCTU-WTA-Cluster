@@ -55,6 +55,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		if( this.doneYet ) {
 			for (Map.Entry<String, String> entry : this.resultList.entrySet()) {
 				System.out.println(entry.getValue());
+				System.out.println("---");
 			}
 			System.out.println("Problem done");
 		}

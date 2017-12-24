@@ -61,14 +61,19 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		if ( doneYet )
 			return;
 
-		tryReceive();
-
 		switch( state ) {
 			case 0:
 				parseProblem();
 				break;
 			case 1:
-				execution();
+			    if ( System.currentTimeMillis() > this.endtime ) {
+					this.state = 2;
+					replyWithResult();
+					return;
+				}
+				tryReceive();
+				for( int i=0; i<100; i++)
+					execution();
 				break;
 			case 2:
 				replyWithResult();
@@ -164,6 +169,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.endtime += System.currentTimeMillis();
 		
 		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm, this.peerList );
+		//this.myAgent.addBehaviour( this.myAgent.tbf.wrap( this.exchangeBehaviour ) );
 		this.myAgent.addBehaviour( this.exchangeBehaviour );
 
 		this.state = 1;
@@ -172,10 +178,6 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	}
 
 	private void execution() {
-		if ( System.currentTimeMillis() > this.endtime ) {
-			this.state = 2;
-			return;
-		}
 		this.algorithm.doIteration();
 		iterCount ++;
 	}
