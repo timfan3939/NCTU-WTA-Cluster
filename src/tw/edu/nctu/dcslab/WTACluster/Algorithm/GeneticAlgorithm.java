@@ -24,16 +24,14 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 	public void generatePopulation() {
-		solutions = new ArrayList<Chromosomes>();
-		int p_length = problem.getSolutionLength();
-		double p_value = problem.getSolutionMax();
+		this.solutions = new ArrayList<Chromosomes>();
 
-		for ( int i=0; i<population; i++ ) {
-			double[] sol = new double[p_length];
-			for (int j=0; j<p_length; j++) {
-				sol[j] = rand.nextDouble() * p_value;
+		for ( int i=0; i<this.population; i++ ) {
+			double[] sol = new double[this.solutionLength];
+			for (int j=0; j<this.solutionLength; j++) {
+				sol[j] = rand.nextDouble() * this.solutionValueMax;
 			}
-			solutions.add( new Chromosomes(sol, problem) );
+			solutions.add( new Chromosomes(sol, this.problem) );
 		}
 		childSolutions = new ArrayList<Chromosomes>();
 	}
@@ -51,7 +49,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 	private void duplicate() {
 		for ( Chromosomes ch : solutions ) {
-			childSolutions.add( new Chromosomes( ch.solution, problem ) );
+			childSolutions.add( new Chromosomes( ch.solution.clone(), problem ) );
 		}
 	}
 
@@ -71,11 +69,11 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 			int crossoverPosition = 0;
 			do {
-				crossoverPosition = rand.nextInt(solutionLength);
+				crossoverPosition = rand.nextInt( this.solutionLength );
 			} while (crossoverPosition == 0);
 
-			double[] ch1 = new double[solutionLength];
-			double[] ch2 = new double[solutionLength];
+			double[] ch1 = new double[ this.solutionLength ];
+			double[] ch2 = new double[ this.solutionLength ];
 
 			for ( int i=0; i<solutionLength; i++) {
 				if ( i == crossoverPosition ) {
@@ -94,12 +92,12 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	private void mutation() {
 		for ( Chromosomes pa : solutions ) {
 			if ( rand.nextDouble() <= mutationRate ) {
-				double[] ch = Arrays.copyOf(pa.solution, solutionLength);
+				double[] ch = pa.solution.clone();
 				int mutatePos = rand.nextInt(solutionLength);
 				double value = 0;
 				do {
-					value = rand.nextDouble() * solutionValueMax;
-				} while ( ch[mutatePos] == value );
+					value = rand.nextDouble() * this.solutionValueMax;
+				} while ( (int)ch[mutatePos] == (int)value );
 
 				ch[mutatePos] = value;
 				childSolutions.add( new Chromosomes( ch, problem ) );

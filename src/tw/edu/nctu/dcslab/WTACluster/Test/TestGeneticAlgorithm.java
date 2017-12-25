@@ -47,13 +47,13 @@ public class TestGeneticAlgorithm {
 		//problem.SaveProblemToFile("WTAProblem.txt");
 		//problem.LoadProblemFromFile("WTAProblem.txt");
 		
-		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 1000);
+		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 100);
 
 		System.out.println("Start Genetic Test");
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 1000000000;
+		int iterationRound = 10000;
 
 		for( int i=0; i<iterationRound; i++ ) {
 			genetic.doIteration();
@@ -64,8 +64,8 @@ public class TestGeneticAlgorithm {
 				bestValue = tmp;
 			}
 
-			if ( percentage != (1000 * i/iterationRound) ) {
-				percentage = (1000 * i/iterationRound);
+			if ( percentage != (100 * i/iterationRound) ) {
+				percentage = (100 * i/iterationRound);
 				System.out.println("" + percentage + "% completed.");
 			}
 
