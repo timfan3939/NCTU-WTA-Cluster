@@ -13,7 +13,7 @@ public abstract class HeuristicInterface {
 	// Ask do one iteration
 	public abstract void doIteration();
 	
-	protected double[] bestSolution;
+	protected double[] bestSolution = new double[1];
 	// Get currently Best Solution
 	public double[] getBestSolution() {
 		return this.bestSolution;
@@ -28,12 +28,7 @@ public abstract class HeuristicInterface {
 		if( solution.length != this.solutionLength )
 			return;
 		synchronized(this.exchangedSolution) {
-			this.exchangedSolution.add(Arrays.copyOf(solution, this.solutionLength));
-		}
-		synchronized(this.bestSolution) {
-			if( this.problem.fitnessFunction(this.bestSolution) > this.problem.fitnessFunction(solution) ) {
-				this.bestSolution = Arrays.copyOf(solution, this.solutionLength);
-			}
+			this.exchangedSolution.add( solution.clone() );
 		}
 	}
 	

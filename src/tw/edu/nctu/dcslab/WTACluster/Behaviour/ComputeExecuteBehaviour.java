@@ -72,7 +72,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 					return;
 				}
 				tryReceive();
-				for( int i=0; i<100; i++)
+				//for( int i=0; i<100; i++)
 					execution();
 				break;
 			case 2:
@@ -211,6 +211,8 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.addResultMsg( "IterCount:" + this.iterCount );
 		this.addResultMsg( "SentCount:" + this.exchangeBehaviour.getSentCount() );
 		this.addResultMsg( "RecvCount:" + this.msgCount );
+		this.addResultMsg( "SentResult:" );
+		this.addResultMsg( this.exchangeBehaviour.getSentResult() );
 
 
 		ACLMessage reply = message.createReply();

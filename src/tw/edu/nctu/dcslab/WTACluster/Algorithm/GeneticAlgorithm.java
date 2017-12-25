@@ -15,6 +15,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	private double mutationRate = 0.4;
 	private ArrayList<Chromosomes> solutions;
 	private ArrayList<Chromosomes> childSolutions;
+	private Chromosomes bestSolutionChromosomes = null;
 
 	public GeneticAlgorithm( ProblemInterface problem, int population ) {
 		super.setProblemInterface( problem );
@@ -24,18 +25,16 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 	public void generatePopulation() {
-		solutions = new ArrayList<Chromosomes>();
-		int p_length = problem.getSolutionLength();
-		double p_value = problem.getSolutionMax();
+		this.solutions = new ArrayList<Chromosomes>();
+		this.childSolutions = new ArrayList<Chromosomes>();
 
-		for ( int i=0; i<population; i++ ) {
-			double[] sol = new double[p_length];
-			for (int j=0; j<p_length; j++) {
-				sol[j] = rand.nextDouble() * p_value;
+		for ( int i=0; i<this.population; i++ ) {
+			double[] sol = new double[this.solutionLength];
+			for (int j=0; j<this.solutionLength; j++) {
+				sol[j] = rand.nextDouble() * this.solutionValueMax;
 			}
-			solutions.add( new Chromosomes(sol, problem) );
+			solutions.add( new Chromosomes(sol, this.problem) );
 		}
-		childSolutions = new ArrayList<Chromosomes>();
 	}
 
 	public void doIteration() {
@@ -71,11 +70,11 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 			int crossoverPosition = 0;
 			do {
-				crossoverPosition = rand.nextInt(solutionLength);
+				crossoverPosition = rand.nextInt( this.solutionLength );
 			} while (crossoverPosition == 0);
-
-			double[] ch1 = new double[solutionLength];
-			double[] ch2 = new double[solutionLength];
+			
+			double[] ch1 = new double[ this.solutionLength ];
+			double[] ch2 = new double[ this.solutionLength ];
 
 			for ( int i=0; i<solutionLength; i++) {
 				if ( i == crossoverPosition ) {
@@ -86,23 +85,23 @@ public class GeneticAlgorithm extends HeuristicInterface {
 				ch1[i] = pa1.solution[i];
 				ch2[i] = pa2.solution[i];
 			}
-			childSolutions.add( new Chromosomes(ch1, problem) );
-			childSolutions.add( new Chromosomes(ch2, problem) );
+			childSolutions.add( new Chromosomes(ch1, this.problem) );
+			childSolutions.add( new Chromosomes(ch2, this.problem) );
 		}
 	}
 
 	private void mutation() {
 		for ( Chromosomes pa : solutions ) {
 			if ( rand.nextDouble() <= mutationRate ) {
-				double[] ch = Arrays.copyOf(pa.solution, solutionLength);
+				double[] ch = pa.solution.clone();
 				int mutatePos = rand.nextInt(solutionLength);
 				double value = 0;
 				do {
-					value = rand.nextDouble() * solutionValueMax;
-				} while ( ch[mutatePos] == value );
+					value = rand.nextDouble() * this.solutionValueMax;
+				} while ( (int)ch[mutatePos] == (int)value );
 
 				ch[mutatePos] = value;
-				childSolutions.add( new Chromosomes( ch, problem ) );
+				childSolutions.add( new Chromosomes( ch, this.problem ) );
 			}
 		}
 	}
@@ -115,9 +114,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 			this.exchangedSolution.clear();
 		}
 
-
 		solutions.clear();
-		updateChildSolutions();
 
 		double totalValue = 0.0;
 		double[] value = new double[childSolutions.size()];
@@ -126,7 +123,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 			totalValue += value[i];
 		}
 		
-		for ( int i=0; i<population; i++ ) {
+		while( solutions.size() < population ) {
 			double chosen = rand.nextDouble();
 			for ( int j=0; j<value.length; j++ ) {
 				chosen -= value[j] / totalValue;
@@ -140,28 +137,20 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 
 	public void updateLocalBestSolution() {
-		updateSolutions();
-		Collections.sort(solutions);
-
-		if(bestSolution == null) {
-			bestSolution = solutions.get(0).solution;
-			return;
+		Collections.sort( this.childSolutions );
+		if( this.bestSolutionChromosomes != null ) {
+			if ( this.bestSolutionChromosomes.compareTo(this.childSolutions.get(0)) > 0 ) {
+				this.bestSolutionChromosomes = new Chromosomes( this.childSolutions.get(0).solution, this.problem );
+				synchronized( this.bestSolution ) {
+					this.bestSolution = this.bestSolutionChromosomes.solution;
+				}
+			}
 		}
-		
-		if( problem.fitnessFunction(bestSolution) > solutions.get(0).value ) {
-			bestSolution = solutions.get(0).solution;
-		}
-	}
-
-	public void updateSolutions() {
-		for ( Chromosomes ch : solutions )
-			ch.updateValue();
-	}
-
-	public void updateChildSolutions() {
-		if ( childSolutions != null ) {
-			for ( Chromosomes ch : childSolutions )
-				ch.updateValue();
+		else {
+			this.bestSolutionChromosomes = new Chromosomes( this.childSolutions.get(0).solution, this.problem );
+			synchronized( this.bestSolution ) {
+				this.bestSolution = this.bestSolutionChromosomes.solution;
+			}
 		}
 	}
 
@@ -172,28 +161,26 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 		public Chromosomes ( double[] solution, ProblemInterface problem ) {
 			this.problem = problem;
-			this.solution = Arrays.copyOf(solution, solution.length);
+			this.solution = solution.clone();
+			this.updateValue();
 		}
 
 		public void updateValue() {
-			value = problem.fitnessFunction(solution);
+			this.value = this.problem.fitnessFunction( this.solution );
 		}
 		
 		@Override
 		public int compareTo( Chromosomes ch ) {
-			this.updateValue();
-			ch.updateValue();
-			
 			if(this.value > ch.value)
 				return 1;
 			else if (this.value < ch.value)
 				return -1;
 			else {
 				for( int i=0; i<this.solution.length; i++ ) {
-					if ( this.solution[i] > ch.solution[i] ) {
+					if ( (int)this.solution[i] > (int)ch.solution[i] ) {
 						return 1;
 					}
-					else if (this.solution[i] < ch.solution[i]) {
+					else if ( (int)this.solution[i] < (int)ch.solution[i] ) {
 						return -1;
 					}
 				}
