@@ -74,6 +74,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		catch( Exception e ) {
 			e.printStackTrace();
 		}
+		System.out.println(result);
 	}
 
 	public boolean done() {

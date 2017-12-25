@@ -53,7 +53,7 @@ public class TestGeneticAlgorithm {
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 10000;
+		int iterationRound = 20000;
 
 		for( int i=0; i<iterationRound; i++ ) {
 			genetic.doIteration();
