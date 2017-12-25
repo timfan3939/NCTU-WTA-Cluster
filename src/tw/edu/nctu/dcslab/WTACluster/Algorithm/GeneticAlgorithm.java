@@ -171,9 +171,6 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		
 		@Override
 		public int compareTo( Chromosomes ch ) {
-			this.updateValue();
-			ch.updateValue();
-			
 			if(this.value > ch.value)
 				return 1;
 			else if (this.value < ch.value)
