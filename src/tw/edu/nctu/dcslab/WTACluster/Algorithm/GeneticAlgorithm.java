@@ -49,9 +49,9 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	}
 
 	private void duplicate() {
-		for ( Chromosomes ch : solutions ) {
-			childSolutions.add( new Chromosomes( ch.solution, problem ) );
-		}
+		Collections.sort( this.solutions );
+		for ( int i = 0; i < this.population * 0.1; i++ )
+			childSolutions.add( new Chromosomes( this.solutions.get(i).solution, this.problem) );
 	}
 
 	private void crossover() {
