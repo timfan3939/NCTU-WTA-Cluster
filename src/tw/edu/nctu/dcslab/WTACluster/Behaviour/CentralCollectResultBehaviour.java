@@ -8,7 +8,9 @@ import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Map;
+import java.util.Date;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 
@@ -61,13 +63,13 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	}
 
 	private void writeResult() {
-		System.out.println("Almost finish");
+		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + ".log";
 		String result = "";
 		for( Map.Entry<String, String> entry : this.resultList.entrySet() ) {
 			result += entry.getValue() + "\n---\n";
 		}
 		try {
-			FileWriter writer = new FileWriter( "log/" + this.problemID + ".txt" );
+			FileWriter writer = new FileWriter( "log/" + filename );
 			writer.write(result);
 			writer.close();
 		}
