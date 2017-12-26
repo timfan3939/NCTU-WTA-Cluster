@@ -90,6 +90,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private void parseProblem() {
 		String content = this.message.getContent();
 		String[] subContent = content.split("--\n");
+		System.out.println( content );
 		
 		// Problem ID
 		this.problemID = subContent[0].split("\n")[1].trim();
@@ -123,6 +124,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
 			String[] subLine = line.split(":");
+			this.addResultMsg( "line " + line );
 			switch( subLine[0] ){
 				case "Time":
 					this.endtime = Long.parseLong(subLine[1]);
@@ -135,6 +137,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 					break;
 				case "LossRate":
 					this.lossRate = Double.parseDouble(subLine[1]);
+					this.addResultMsg( "LossRate(String): " + subLine[1] );
 					break;
 				case "ExchangeInterval":
 					this.exchangeInterval = Long.parseLong(subLine[1]);
@@ -211,6 +214,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.addResultMsg( "IterCount:" + this.iterCount );
 		this.addResultMsg( "SentCount:" + this.exchangeBehaviour.getSentCount() );
 		this.addResultMsg( "RecvCount:" + this.msgCount );
+		this.addResultMsg( "LossRate:" + this.lossRate );
 		this.addResultMsg( "SentResult:" );
 		this.addResultMsg( this.exchangeBehaviour.getSentResult() );
 
