@@ -124,7 +124,6 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		// Execution Setting
 		for( String line:subContent[3].split("\n") ) {
 			String[] subLine = line.split(":");
-			this.addResultMsg( "line " + line );
 			switch( subLine[0] ){
 				case "Time":
 					this.endtime = Long.parseLong(subLine[1]);
@@ -137,7 +136,6 @@ public class ComputeExecuteBehaviour extends Behaviour {
 					break;
 				case "LossRate":
 					this.lossRate = Double.parseDouble(subLine[1]);
-					this.addResultMsg( "LossRate(String): " + subLine[1] );
 					break;
 				case "ExchangeInterval":
 					this.exchangeInterval = Long.parseLong(subLine[1]);

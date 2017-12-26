@@ -155,6 +155,15 @@ public class CentralCollectResultBehaviour extends Behaviour {
 			if( minSolHis > isol.length )
 				minSolHis = isol.length;
 		}
+
+		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + "summary" + ".csv";
+		String result = "";
+		result += this.setting.replace( ":", "\t" );
+		result += "\n---\n";
+		result += "Round\tValue";
+		for( int w = 0; w < this.problem.getSolutionLength(); w++ ) 
+			result += "\t" + w;
+		result += "\n";
 		
 		for( int round=0; round < minSolHis; round++ ) {
 			int[] sol = new int[this.problem.getSolutionLength()];
@@ -163,17 +172,27 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				sol[w] = solutionHistory.get(w)[round];
 				dsol[w] = (double) sol[w];
 			}
+
+			result += round;
+			result += "\t" + this.problem.fitnessFunction( dsol );
+			for( int w = 0; w < sol.length; w++ ) {
+				result += "\t" + sol[w];
+			}
+			result += "\n";
+
 			System.out.println( this.problem.fitnessFunction( dsol ) + "\t" + Arrays.toString( sol ) );
 		}
 
-
-
-
-
-
-
-
-
+		try {
+			FileWriter writer = new FileWriter( "log/" + filename );
+			writer.write(result);
+			writer.close();
+		}
+		catch( Exception e ) {
+			System.err.println("Error when writing file: " + filename);
+			e.printStackTrace();
+		}
+		
 		this.state ++ ;
 	}
 
