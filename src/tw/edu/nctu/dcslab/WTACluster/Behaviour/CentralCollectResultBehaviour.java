@@ -24,6 +24,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	private ArrayList<PeerInfo> peerList;
 	private TreeMap<String, String> resultList = new TreeMap<String, String>();
 	private String problemID;
+	private int state = 0;
 
 	public CentralCollectResultBehaviour( CentralAgent agent, String problemID ) {
 		super(agent);
@@ -31,14 +32,32 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		this.peerList = this.myAgent.getPeerList();
 		this.problemID = problemID;
 	}
-
+	
 	@Override
 	public void action() {
 		if( this.doneYet )
 			return;
+		switch ( this.state ) {
+			case 0:
+				this.receiveResult();
+				break;
+			case 1:
+				this.writeResult();
+				break;
+			case 2:
+				this.writeSummary();
+				break;
+			case 9:
+				this.doneYet = true;
+				break;
+			default:
+				this.state ++;
+		}
+	}
+
+	public void receiveResult() {
 		if( this.resultList.size() == this.peerList.size() ) {
-			this.writeResult();
-			this.doneYet = true;
+			this.state = 2;
 			return;
 		}
 
@@ -77,6 +96,11 @@ public class CentralCollectResultBehaviour extends Behaviour {
 			e.printStackTrace();
 		}
 		System.out.println(result);
+		this.state = 3;
+	}
+
+	private void writeSummary() {
+		this.state = 4;
 	}
 
 	public boolean done() {
