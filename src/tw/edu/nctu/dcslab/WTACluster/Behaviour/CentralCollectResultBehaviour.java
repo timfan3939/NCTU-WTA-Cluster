@@ -24,13 +24,15 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	private ArrayList<PeerInfo> peerList;
 	private TreeMap<String, String> resultList = new TreeMap<String, String>();
 	private String problemID;
+	private String setting;
 	private int state = 0;
 
-	public CentralCollectResultBehaviour( CentralAgent agent, String problemID ) {
+	public CentralCollectResultBehaviour( CentralAgent agent, String problemID, String setting) {
 		super(agent);
 		this.myAgent = agent;
 		this.peerList = this.myAgent.getPeerList();
 		this.problemID = problemID;
+		this.setting = setting;
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 	public void receiveResult() {
 		if( this.resultList.size() == this.peerList.size() ) {
-			this.state = 2;
+			this.state ++;
 			return;
 		}
 
@@ -84,6 +86,8 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	private void writeResult() {
 		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + ".log";
 		String result = "";
+		result += this.setting.replace( ":", "\t" );
+		result += "\n---\n";
 		for( Map.Entry<String, String> entry : this.resultList.entrySet() ) {
 			result += entry.getValue() + "\n---\n";
 		}
@@ -96,11 +100,11 @@ public class CentralCollectResultBehaviour extends Behaviour {
 			e.printStackTrace();
 		}
 		System.out.println(result);
-		this.state = 3;
+		this.state ++;
 	}
 
 	private void writeSummary() {
-		this.state = 4;
+		this.state ++ ;
 	}
 
 	public boolean done() {
