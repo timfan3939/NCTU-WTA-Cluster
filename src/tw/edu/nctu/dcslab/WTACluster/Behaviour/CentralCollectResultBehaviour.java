@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Date;
+import java.util.Set;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 
@@ -22,7 +23,8 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	private CentralAgent myAgent;
 	private boolean doneYet = false;
 	private ArrayList<PeerInfo> peerList;
-	private TreeMap<String, String> resultList = new TreeMap<String, String>();
+	private TreeMap<String, String> resultTreeMap = new TreeMap<String, String>();
+	private Set< Map.Entry<String, String> > resultSet = null;
 	private String problemID;
 	private String setting;
 	private int state = 0;
@@ -58,7 +60,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	}
 
 	public void receiveResult() {
-		if( this.resultList.size() == this.peerList.size() ) {
+		if( this.resultTreeMap.size() == this.peerList.size() ) {
 			this.state ++;
 			return;
 		}
@@ -79,7 +81,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		String[] line = content.split("\n");
 
 		if( line[0].split(":")[1].matches(this.problemID) ) {
-			this.resultList.put( line[1], content );
+			this.resultTreeMap.put( line[1], content );
 		}
 	}
 
@@ -88,7 +90,9 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		String result = "";
 		result += this.setting.replace( ":", "\t" );
 		result += "\n---\n";
-		for( Map.Entry<String, String> entry : this.resultList.entrySet() ) {
+
+		this.resultSet = this.resultTreeMap.entrySet();
+		for( Map.Entry<String, String> entry : this.resultSet ) {
 			result += entry.getValue() + "\n---\n";
 		}
 		try {
@@ -99,11 +103,24 @@ public class CentralCollectResultBehaviour extends Behaviour {
 		catch( Exception e ) {
 			e.printStackTrace();
 		}
-		System.out.println(result);
+		//System.out.println(result);
 		this.state ++;
 	}
 
 	private void writeSummary() {
+		ArrayList<double[]> historySolution = new ArrayList<double[]>();
+		for( Map.Entry<String, String> entry : this.resultSet ) {
+			String content = entry.getValue();
+			String[] line = content.split("\n");
+
+		}
+
+
+
+
+
+
+
 		this.state ++ ;
 	}
 
