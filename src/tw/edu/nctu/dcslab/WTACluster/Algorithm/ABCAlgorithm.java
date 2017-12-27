@@ -13,7 +13,7 @@ public class ABCAlgorithm extends HeuristicInterface {
 	private int population;
 
 	private ArrayList<FoodSource> foodSource;
-	private int trialLimit = 2000;
+	private int trialLimit = 1400;
 
 	private FoodSource bestFoodSource;
 
@@ -47,7 +47,7 @@ public class ABCAlgorithm extends HeuristicInterface {
 				B = rand.nextInt( this.population );
 			}
 
-			double bias = 2.0 * rand.nextDouble() - 1.0;
+			double bias = 2.0 * ( rand.nextDouble() - 0.5 ) ;
 			int dimension = rand.nextInt( this.solutionLength );
 			
 			FoodSource fsA = this.foodSource.get(A);
@@ -63,9 +63,10 @@ public class ABCAlgorithm extends HeuristicInterface {
 				pos[ dimension ] = 2.0 * this.solutionValueMax - pos[ dimension ];
 			else
 				pos[ dimension ] -= 0.01;
+			newFS.setPos(pos);
 			
 			if( fsA.compareTo(newFS) > 0 ) {
-				fsA.setPos( newFS.getPos() );
+				fsA.setPos( pos );
 			}
 	}
 
@@ -79,24 +80,19 @@ public class ABCAlgorithm extends HeuristicInterface {
 		double totalValue = 0.0;
 		double[] value = new double[ this.population ];
 		for( int i=0; i<this.foodSource.size(); i++ ) {
-			value[i] = 1/foodSource.get(i).getValue();
+			value[i] = 1.0/foodSource.get(i).getValue();
 			totalValue += value[i];
 		}
 
-		int[] onlooker = new int[ this.population ];
 		for( int i=0; i<this.foodSource.size(); i++ ) {
 			double chosen = rand.nextDouble();
 			for( int j=0; j<value.length; j++ ) {
 				chosen -= value[j]/totalValue;
 				if( chosen < 0.0 ) {
-					onlooker[i] = j;
+					this.updateFoodSource( j );
 					break;
 				}
 			}
-		}
-
-		for( int i=0; i<onlooker.length; i++ ) {
-			this.updateFoodSource( onlooker[i] );
 		}
 	}
 
@@ -117,11 +113,50 @@ public class ABCAlgorithm extends HeuristicInterface {
 			if( this.bestFoodSource.compareTo( fs ) > 0 )
 				this.bestFoodSource = fs.clone();
 		}
+
+		boolean modified = false;
+		
+		synchronized( this.exchangedSolution ) {
+			for( double[] sol: this.exchangedSolution ) {
+				FoodSource fs = new FoodSource( this.problem, sol, this.trialLimit );
+				if( this.bestFoodSource.compareTo( fs ) > 0 ) {
+					this.bestFoodSource = fs;
+					modified = true;
+				}
+			}
+		}
+
+		if( modified ) {
+			FoodSource fs = this.foodSource.get(0);
+			for( int i=0; i<this.foodSource.size(); i++ ) {
+				if( fs.getRemainTrial() > this.foodSource.get(i).getRemainTrial() )
+					fs = this.foodSource.get(i);
+			}
+			fs.setPos( this.bestFoodSource.getPos() );
+		}
+
 		this.bestSolution = this.bestFoodSource.getPos().clone();
 	}
 
 	@Override
 	public boolean setAlgorithmParameter( String str ) {
+		String[] line = str.split("\n");
+		String[] subline;
+		
+		for( int i=0; i<line.length; i++ ) {
+			subline = line[i].split(":");
+			if( subline.length != 2 ) {
+				continue;
+			}
+			switch( subline[0] ) {
+				case "TrialLimit":
+					this.trialLimit = Integer.parseInt( subline[1] );
+					break;
+				default:
+					break;
+			}
+		}
+
 		return false;
 	}
 
@@ -140,7 +175,7 @@ public class ABCAlgorithm extends HeuristicInterface {
 		}
 
 		public void setPos( double[] pos ) {
-			this.pos = pos;
+			this.pos = pos.clone();
 			this.value = this.problem.fitnessFunction( this.pos );
 			this.remainTrial = this.defaultTrial;
 		}
@@ -159,6 +194,10 @@ public class ABCAlgorithm extends HeuristicInterface {
 
 		public boolean hasTrial() {
 			return this.remainTrial > 0;
+		}
+
+		public int getRemainTrial() {
+			return this.remainTrial;
 		}
 
 		private FoodSource(){};

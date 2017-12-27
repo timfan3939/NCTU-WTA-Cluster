@@ -53,7 +53,7 @@ public class TestABCAlgorithm {
 
 		double bestValue = 9999;
 		int percentage = 0;
-		int iterationRound = 2000000;
+		int iterationRound = 800000;
 
 		for( int i=0; i<iterationRound; i++ ) {
 			abc.doIteration();
