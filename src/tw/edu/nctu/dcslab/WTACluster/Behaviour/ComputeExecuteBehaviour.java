@@ -15,6 +15,7 @@ import tw.edu.nctu.dcslab.WTACluster.Problem.WTAProblem;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.HeuristicInterface;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.GeneticAlgorithm;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.PSOAlgorithm;
+import tw.edu.nctu.dcslab.WTACluster.Algorithm.ABCAlgorithm;
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 
 public class ComputeExecuteBehaviour extends Behaviour {
@@ -159,9 +160,9 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
 				break;	
 			case "ABC":
-				this.addResultMsg( "ABC is not implemented yet" );
-				this.state = 2;
-				return;
+				this.algorithm = new ABCAlgorithm( this.problem, this.population );
+				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
+				break;
 			default:
 				this.addResultMsg( "No such Algorithm Found: " + this.algorithmName );
 				this.state = 2;

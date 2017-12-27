@@ -71,4 +71,9 @@
 		</java>
 	</target>
 
+	<target name="testABC" description="test ABC algorithm and WTA problem">
+		<java fork="true" failonerror="yes" classname="tw.edu.nctu.dcslab.WTACluster.Test.TestABCAlgorithm" classpath="${bin.dir}" maxmemory="4096m" >
+		</java>
+	</target>
+
 </project>

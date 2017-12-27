@@ -1,8 +1,9 @@
 Problem:problem/WTAProblem.txt
-Algorithm:PSO
+Algorithm:ABC
 Omega:1.0
 C1:1.0
 C2:1.0
+TrialLimit:10000
 Time:10000
 LossRate:0.0
 Population:100

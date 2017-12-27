@@ -10,8 +10,7 @@ import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 public class PSOAlgorithm extends HeuristicInterface {
 	private Random rand = new Random();
 
-	private double[] gloBestPos;
-	private double gloBestPosValue;
+	private Particle gloBest;
 
 	private ArrayList<Particle> particles = new ArrayList<Particle>();
 
@@ -26,11 +25,7 @@ public class PSOAlgorithm extends HeuristicInterface {
 		this.population = population;
 		this.generateParticles();
 
-		this.gloBestPos = new double[ this.solutionLength ];
-		for( int i=0; i<this.gloBestPos.length; i++ )
-			this.gloBestPos[i] = rand.nextDouble() * this.solutionValueMax;
-
-		this.gloBestPosValue = this.problem.fitnessFunction( this.gloBestPos );
+		this.gloBest = new Particle( problem, rand );
 	}
 
 	private void generateParticles() {
@@ -41,19 +36,14 @@ public class PSOAlgorithm extends HeuristicInterface {
 
 	@Override
 	public void doIteration() {
-		double[] exSol = null;
+		Particle tmpParticle = this.gloBest.clone();
 		synchronized( this.exchangedSolution ) {
 			for( double[] sol: this.exchangedSolution ) {
-				if( this.gloBestPosValue >
-				    this.problem.fitnessFunction( sol ) ) {
-					exSol = sol;
-				}
+				tmpParticle.setPos( sol );
+				if( this.gloBest.compareTo( tmpParticle ) > 0 )
+					this.gloBest = tmpParticle.clone();
 			}
 			this.exchangedSolution.clear();
-		}
-		if( exSol != null ) {
-			this.gloBestPos = exSol.clone();
-			this.gloBestPosValue = this.problem.fitnessFunction( this.gloBestPos );
 		}
 
 		for( Particle p: this.particles ) {
@@ -61,14 +51,12 @@ public class PSOAlgorithm extends HeuristicInterface {
 			          this.omega,
 					  this.c1,
 					  this.c2,
-					  this.gloBestPos );
-			if ( this.gloBestPosValue > p.getBestPosValue() ) {
-				this.gloBestPos = p.getBestPos().clone();
-				this.gloBestPosValue = p.getBestPosValue();
-			}
+					  this.gloBest );
+			if ( this.gloBest.compareTo( p ) > 0 )
+				this.gloBest = p.clone();
 			//System.out.println("" + p.getBestPosValue());
 		}
-		this.bestSolution = this.gloBestPos;
+		this.bestSolution = this.gloBest.getPos().clone();
 	}
 
 	@Override
@@ -99,7 +87,7 @@ public class PSOAlgorithm extends HeuristicInterface {
 		return false;
 	}
 
-	private class Particle {
+	private class Particle implements Comparable<Particle>, Cloneable{
 		private double[] pos;
 		private double posValue;
 		private double[] bestPos;
@@ -107,6 +95,9 @@ public class PSOAlgorithm extends HeuristicInterface {
 		private double[] velocity;
 
 		private ProblemInterface problem;
+
+		private Particle() {
+		}
 
 		public Particle(ProblemInterface problem, Random rand) {
 			this.problem = problem;
@@ -127,6 +118,11 @@ public class PSOAlgorithm extends HeuristicInterface {
 			return this.pos;
 		}
 
+		public void setPos( double[] pos ) {
+			this.pos = pos.clone();
+			this.posValue = this.problem.fitnessFunction( this.pos );
+		}
+
 		public double[] getBestPos() {
 			return this.bestPos;
 		}
@@ -139,11 +135,7 @@ public class PSOAlgorithm extends HeuristicInterface {
 			return this.velocity;
 		}
 
-		public void update( Random rand, double omega, double c1, double c2, double[] gloBestPos ) {
-			if( gloBestPos.length != this.problem.getSolutionLength() ) {
-				System.err.println( "The length of the position is not corrent." );
-				return;
-			}
+		public void update( Random rand, double omega, double c1, double c2, Particle gloBest ) {
 
 			double r1 = rand.nextDouble();
 			double r2 = rand.nextDouble();
@@ -151,7 +143,7 @@ public class PSOAlgorithm extends HeuristicInterface {
 			for( int i=0; i<this.velocity.length; i++ ) {
 				this.velocity[i] = omega * this.velocity[i]
 								 + c1 * r1 * ( this.bestPos[i] - this.pos[i] )
-								 + c2 * r2 * (   gloBestPos[i] - this.pos[i] );
+								 + c2 * r2 * (  gloBest.pos[i] - this.pos[i] );
 				while( this.velocity[i] > this.problem.getSolutionMax() || this.velocity[i] < -this.problem.getSolutionMax() ) {
 					this.velocity[i] /= 2;
 				}
@@ -177,6 +169,36 @@ public class PSOAlgorithm extends HeuristicInterface {
 			}
 			//System.out.println( Arrays.toString( this.pos ) );
 			//System.out.println( Arrays.toString( this.velocity ) );
+		}
+		
+		@Override
+		public int compareTo( Particle p ) {
+			if( this.posValue > p.posValue ) {
+				return 1;
+			} else if( this.posValue < p.posValue ) {
+				return -1;
+			} else {
+				for( int i=0; i<this.pos.length; i++ ) {
+					if( (int)this.pos[i] - (int)p.pos[i] != 0 ) {
+						return (int)this.pos[i] - (int)p.pos[i]; 
+					}
+				}
+			}
+			return 0;
+		}
+
+		@Override
+		public Particle clone() {
+			Particle p = new Particle();
+			
+			p.problem = this.problem;
+			p.pos = this.pos.clone();
+			p.posValue = this.posValue;
+			p.bestPos = this.bestPos.clone();
+			p.bestPosValue = this.bestPosValue;
+			p.velocity = this.velocity.clone();
+
+			return p;
 		}
 	}
 }
