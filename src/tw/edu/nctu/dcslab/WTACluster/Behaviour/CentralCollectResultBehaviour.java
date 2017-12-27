@@ -156,7 +156,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				minSolHis = isol.length;
 		}
 
-		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + "summary" + ".csv";
+		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + "_summary" + ".csv";
 		String result = "";
 		result += this.setting.replace( ":", "\t" );
 		result += "\n---\n";
@@ -179,8 +179,6 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				result += "\t" + sol[w];
 			}
 			result += "\n";
-
-			System.out.println( this.problem.fitnessFunction( dsol ) + "\t" + Arrays.toString( sol ) );
 		}
 
 		try {
@@ -192,6 +190,8 @@ public class CentralCollectResultBehaviour extends Behaviour {
 			System.err.println("Error when writing file: " + filename);
 			e.printStackTrace();
 		}
+
+		System.out.println(result);
 		
 		this.state ++ ;
 	}

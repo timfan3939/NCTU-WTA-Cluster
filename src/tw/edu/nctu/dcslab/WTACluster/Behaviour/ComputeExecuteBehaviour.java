@@ -14,6 +14,7 @@ import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 import tw.edu.nctu.dcslab.WTACluster.Problem.WTAProblem;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.HeuristicInterface;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.GeneticAlgorithm;
+import tw.edu.nctu.dcslab.WTACluster.Algorithm.PSOAlgorithm;
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 
 public class ComputeExecuteBehaviour extends Behaviour {
@@ -154,9 +155,9 @@ public class ComputeExecuteBehaviour extends Behaviour {
 				//this.addResultMsg( this.algorithmSetting );
 				break;
 			case "PSO":
-				this.addResultMsg( "PSO is not implemented yet" );
-				this.state = 2;
-				return;
+				this.algorithm = new PSOAlgorithm( this.problem, this.population );
+				this.algorithm.setAlgorithmParameter( this.algorithmSetting );
+				break;	
 			case "ABC":
 				this.addResultMsg( "ABC is not implemented yet" );
 				this.state = 2;

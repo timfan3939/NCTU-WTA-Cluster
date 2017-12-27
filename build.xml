@@ -66,4 +66,9 @@
 		</java>
 	</target>
 
+	<target name="testPSO" description="test PSO algorithm and WTA problem">
+		<java fork="true" failonerror="yes" classname="tw.edu.nctu.dcslab.WTACluster.Test.TestPSOAlgorithm" classpath="${bin.dir}" maxmemory="4096m" >
+		</java>
+	</target>
+
 </project>
