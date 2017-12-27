@@ -5,7 +5,7 @@ import java.util.Random;
 import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 import tw.edu.nctu.dcslab.WTACluster.Problem.WTAProblem;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.HeuristicInterface;
-import tw.edu.nctu.dcslab.WTACluster.Algorithm.GeneticAlgorithm;
+import tw.edu.nctu.dcslab.WTACluster.Algorithm.PSOAlgorithm;
 
 public class TestPSOAlgorithm {
 
@@ -47,19 +47,19 @@ public class TestPSOAlgorithm {
 		//problem.SaveProblemToFile("WTAProblem.txt");
 		//problem.LoadProblemFromFile("WTAProblem.txt");
 		
-		GeneticAlgorithm genetic = new GeneticAlgorithm(problem, 100);
+		PSOAlgorithm pso = new PSOAlgorithm(problem, 100);
 
-		System.out.println("Start Genetic Test");
+		System.out.println("Start PSO Test");
 
 		double bestValue = 9999;
 		int percentage = 0;
 		int iterationRound = 200000;
 
 		for( int i=0; i<iterationRound; i++ ) {
-			genetic.doIteration();
+			pso.doIteration();
 
-			if ( bestValue > problem.fitnessFunction(genetic.getBestSolution()) ) {
-				double tmp = problem.fitnessFunction(genetic.getBestSolution());
+			if ( bestValue > problem.fitnessFunction(pso.getBestSolution()) ) {
+				double tmp = problem.fitnessFunction(pso.getBestSolution());
 				System.out.println("## " + i + ": \n\t" + bestValue + " -> \n\t" + tmp + " \n\tdiff: " + (tmp - bestValue));
 				bestValue = tmp;
 			}
