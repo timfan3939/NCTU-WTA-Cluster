@@ -43,6 +43,7 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 					seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, problemID, problemFile, setting ) );
 					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent , problemID, problemFile, setting) );
 					setting = "";
+					problemFile = "";
 					i++;
 					continue;
 				}
@@ -52,8 +53,9 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 				setting += ( (setting.isEmpty()?"":"\n") + line );
 			}
 			if ( !problemFile.isEmpty() ) {
-				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
-				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent, ID + "_" + i, problemFile, setting ) );
+				problemID = String.format( "%s_%03d", ID, i );
+				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, problemID, problemFile, setting ) );
+				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent, problemID, problemFile, setting ) );
 			}
 
 			this.myAgent.addBehaviour(seq);
