@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 import java.util.Map;
-import java.util.Date;
 import java.util.Set;
 import java.io.FileWriter;
-import java.text.SimpleDateFormat;
 
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 import tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent;
@@ -91,7 +89,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	}
 
 	private void writeResult() {
-		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + ".log";
+		String filename = this.problemID + ".log";
 		String result = "";
 		result += this.setting.replace( ":", "\t" );
 		result += "\n---\n";
@@ -156,7 +154,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				minSolHis = isol.length;
 		}
 
-		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + "_summary" + ".csv";
+		String filename = this.problemID + "_summary" + ".csv";
 		String result = "";
 		result += this.setting.replace( ":", "\t" );
 		result += "\n---\n";
