@@ -103,7 +103,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 		try {
 			FileWriter writer = new FileWriter( "log/" + filename );
-			writer.write(result);
+			writer.write(result.replaceAll("\t",","));
 			writer.close();
 		}
 		catch( Exception e ) {
@@ -183,7 +183,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 		try {
 			FileWriter writer = new FileWriter( "log/" + filename );
-			writer.write(result);
+			writer.write(result.replaceAll("\t",","));
 			writer.close();
 		}
 		catch( Exception e ) {
