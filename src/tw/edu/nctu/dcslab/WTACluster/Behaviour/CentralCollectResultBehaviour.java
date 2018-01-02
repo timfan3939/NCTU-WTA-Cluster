@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 import java.util.Map;
-import java.util.Date;
 import java.util.Set;
 import java.io.FileWriter;
-import java.text.SimpleDateFormat;
 
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 import tw.edu.nctu.dcslab.WTACluster.Agent.CentralAgent;
@@ -31,15 +29,17 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	private String problemFilename;
 	private String problemID;
 	private String setting;
+	private String summaryFilename;
 	private int state = 0;
 
-	public CentralCollectResultBehaviour( CentralAgent agent, String problemID, String problemFilename, String setting) {
+	public CentralCollectResultBehaviour( CentralAgent agent, String problemID, String problemFilename, String setting, String summaryFilename) {
 		super(agent);
 		this.myAgent = agent;
 		this.peerList = this.myAgent.getPeerList();
 		this.problemID = problemID;
 		this.setting = setting;
 		this.problemFilename = problemFilename;
+		this.summaryFilename = summaryFilename;
 	}
 	
 	@Override
@@ -91,7 +91,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 	}
 
 	private void writeResult() {
-		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + ".log";
+		String filename = this.problemID + ".log";
 		String result = "";
 		result += this.setting.replace( ":", "\t" );
 		result += "\n---\n";
@@ -103,7 +103,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 		try {
 			FileWriter writer = new FileWriter( "log/" + filename );
-			writer.write(result);
+			writer.write(result.replaceAll("\t",","));
 			writer.close();
 		}
 		catch( Exception e ) {
@@ -156,8 +156,9 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				minSolHis = isol.length;
 		}
 
-		String filename = ( new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) ) + "_" + this.problemID + "_summary" + ".csv";
+		String filename = this.problemID + "_summary" + ".csv";
 		String result = "";
+		String globalResult = "";
 		result += this.setting.replace( ":", "\t" );
 		result += "\n---\n";
 		result += "Round\tValue";
@@ -175,6 +176,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 			result += round;
 			result += "\t" + this.problem.fitnessFunction( dsol );
+			globalResult += this.problem.fitnessFunction( dsol ) + ",";
 			for( int w = 0; w < sol.length; w++ ) {
 				result += "\t" + sol[w];
 			}
@@ -183,7 +185,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 
 		try {
 			FileWriter writer = new FileWriter( "log/" + filename );
-			writer.write(result);
+			writer.write(result.replaceAll("\t",","));
 			writer.close();
 		}
 		catch( Exception e ) {
@@ -191,10 +193,24 @@ public class CentralCollectResultBehaviour extends Behaviour {
 			e.printStackTrace();
 		}
 
+		try {
+			FileWriter writer = new FileWriter( "log/" + this.summaryFilename, true);
+			writer.write( problemID );
+			writer.write( "," );
+			writer.write( globalResult );
+			writer.write("\n");
+			writer.close();
+		}
+		catch( Exception e ) {
+			System.err.println("Error when writing file: " + this.summaryFilename );
+			e.printStackTrace();
+		}
+
 		System.out.println(result);
 		
 		this.state ++ ;
 	}
+
 
 	public boolean done() {
 		if( doneYet )
