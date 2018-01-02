@@ -41,7 +41,7 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 				if ( line.matches("--") ) {
 					problemID = String.format( "%s_%03d", ID, i );
 					seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, problemID, problemFile, setting ) );
-					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent , problemID, problemFile, setting) );
+					seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent , problemID, problemFile, setting, ID + ".csv") );
 					setting = "";
 					problemFile = "";
 					i++;
@@ -55,7 +55,7 @@ public class CentralExperimentBehaviour extends OneShotBehaviour {
 			if ( !problemFile.isEmpty() ) {
 				problemID = String.format( "%s_%03d", ID, i );
 				seq.addSubBehaviour( new CentralDispatchProblemBehaviour( this.myAgent, problemID, problemFile, setting ) );
-				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent, problemID, problemFile, setting ) );
+				seq.addSubBehaviour( new CentralCollectResultBehaviour( this.myAgent, problemID, problemFile, setting, ID + ".csv" ) );
 			}
 
 			this.myAgent.addBehaviour(seq);
