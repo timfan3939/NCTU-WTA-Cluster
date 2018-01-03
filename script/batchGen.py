@@ -45,6 +45,12 @@ result = getCommand()
 
 repeat = int( input( "Round: " ) )
 
+print()
+print('+--------+')
+print('| RESULT |')
+print('+--------+')
+print( result )
+
 f = open( 'experiment/single', 'w' )
 
 for i in range( repeat ):
