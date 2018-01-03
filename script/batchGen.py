@@ -25,6 +25,7 @@ def getCommand():
 	result += 'Time:10000\n'
 	result += 'LossRate:' + input( 'Loss Rate: ' ) + '\n'
 	result += 'Population:100\n'
+	result += 'ExchangeInterval:' + input( 'Exchange Interval: ' ) + '\n'
 
 	if choice == 1:
 		result += 'CrossoverRate:' + input( 'Crossover Rate: ' ) + '\n'
