@@ -58,6 +58,10 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		int crossoverRound = population/2;
 
 		for ( int round=0; round<crossoverRound; round++ ) {
+			// Do cross over if random number is less or equal to the crossover rate
+			if ( this.crossoverRate > rand.nextDouble() )
+				continue;
+
 			int A = rand.nextInt(population);
 			int B = 0;
 
@@ -92,6 +96,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 
 	private void mutation() {
 		for ( Chromosomes pa : solutions ) {
+			// Do mutation if the random number is smaller or equal to the mutation rate
 			if ( rand.nextDouble() <= mutationRate ) {
 				double[] ch = pa.solution.clone();
 				int mutatePos = rand.nextInt(solutionLength);
