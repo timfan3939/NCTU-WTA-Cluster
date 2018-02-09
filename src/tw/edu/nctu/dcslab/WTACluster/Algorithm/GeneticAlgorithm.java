@@ -100,7 +100,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 			if ( rand.nextDouble() <= mutationRate ) {
 				double[] ch = pa.solution.clone();
 				int mutatePos = rand.nextInt(solutionLength);
-				double value = 0;
+				double value = 0.0;
 				do {
 					value = rand.nextDouble() * this.solutionValueMax;
 				} while ( (int)ch[mutatePos] == (int)value );
@@ -124,7 +124,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 		double totalValue = 0.0;
 		double[] value = new double[childSolutions.size()];
 		for ( int i = 0; i<value.length; i++ ) {
-			value[i] = 1/childSolutions.get(i).value;
+			value[i] = 1.0/childSolutions.get(i).value;
 			totalValue += value[i];
 		}
 		
