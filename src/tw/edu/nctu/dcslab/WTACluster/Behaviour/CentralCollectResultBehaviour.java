@@ -1,12 +1,10 @@
 package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 
-import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Set;

@@ -3,13 +3,10 @@ package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import tw.edu.nctu.dcslab.WTACluster.Agent.ComputeAgent;
-import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 import tw.edu.nctu.dcslab.WTACluster.Algorithm.HeuristicInterface;
 import tw.edu.nctu.dcslab.WTACluster.util.PeerInfo;
 

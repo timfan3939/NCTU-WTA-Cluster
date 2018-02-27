@@ -3,8 +3,6 @@ package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;

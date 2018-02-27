@@ -1,6 +1,5 @@
 package tw.edu.nctu.dcslab.WTACluster.Problem;
 
-import java.util.Arrays;
 
 public class SphereProblem implements ProblemInterface {
 	private int solutionLength;
