@@ -136,7 +136,8 @@ public class CentralCollectResultBehaviour extends Behaviour {
 					finalsol = new Integer(ssol[w]);
 				}
 				else if( subLine[0].matches("SentResult") ) {
-					for( l++; l<line.length; l++ ) {
+					l++;
+					for( ; l<line.length; l++ ) {
 						subLine = line[l].split("\t");
 						ssol = subLine[2].replaceAll("\\[","").replaceAll("\\]","").replaceAll("\\s","").split(",");
 						solList.add( new Integer(ssol[w]) );
