@@ -59,6 +59,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				break;
 			default:
 				this.state ++;
+				break;
 		}
 	}
 
