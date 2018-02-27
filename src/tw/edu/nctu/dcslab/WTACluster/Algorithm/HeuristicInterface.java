@@ -8,11 +8,14 @@ import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 public abstract class HeuristicInterface {
 
 	protected ProblemInterface problem;
+	protected double[] bestSolution = new double[1];
+	protected ArrayList<double[]> exchangedSolution = new ArrayList<double[]>();
+	protected int solutionLength;
+	protected double solutionValueMax;
 
 	// Ask do one iteration
 	public abstract void doIteration();
 	
-	protected double[] bestSolution = new double[1];
 	// Get currently Best Solution
 	public double[] getBestSolution() {
 		return this.bestSolution;
@@ -20,7 +23,6 @@ public abstract class HeuristicInterface {
 
 	public abstract boolean setAlgorithmParameter(String str);
 
-	protected ArrayList<double[]> exchangedSolution = new ArrayList<double[]>();
 
 	// Add Possible Solutions
 	public void addSolutions(double[] solution) {
@@ -31,8 +33,6 @@ public abstract class HeuristicInterface {
 		}
 	}
 	
-	protected int solutionLength;
-	protected double solutionValueMax;
 	// Set Problem Interface
 	public void setProblemInterface(ProblemInterface problem) {
 		this.problem = problem;

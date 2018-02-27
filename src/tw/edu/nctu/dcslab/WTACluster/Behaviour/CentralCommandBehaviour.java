@@ -24,7 +24,6 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 	@Override
 	public void action() {
 		String line = scanner.nextLine();
-		ACLMessage msg;
 
 		switch (line) {
 			case "quit":
