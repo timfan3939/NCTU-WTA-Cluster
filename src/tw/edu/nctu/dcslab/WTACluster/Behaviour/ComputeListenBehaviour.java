@@ -48,6 +48,7 @@ public class ComputeListenBehaviour extends CyclicBehaviour {
 				break;
 			default:
 				System.out.println(content);
+				break;
 		}
 	}
 }

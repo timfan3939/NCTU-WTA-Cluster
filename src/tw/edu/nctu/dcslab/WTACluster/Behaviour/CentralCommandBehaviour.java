@@ -43,6 +43,7 @@ public class CentralCommandBehaviour extends CyclicBehaviour {
 			default:
 				System.out.println("Error: " + line);
 				System.out.println("Available: quit loadpeer pingpeer batch");
+				break;
 		}
 	}
 }

@@ -161,7 +161,7 @@ public class GeneticAlgorithm extends HeuristicInterface {
 	private class Chromosomes implements Comparable<Chromosomes> {
 		public double value;
 		public double[] solution;
-		ProblemInterface problem;
+		private ProblemInterface problem;
 
 		public Chromosomes ( double[] solution, ProblemInterface problem ) {
 			this.problem = problem;

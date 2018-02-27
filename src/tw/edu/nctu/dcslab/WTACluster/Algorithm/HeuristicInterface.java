@@ -1,7 +1,6 @@
 package tw.edu.nctu.dcslab.WTACluster.Algorithm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import tw.edu.nctu.dcslab.WTACluster.Problem.ProblemInterface;
 

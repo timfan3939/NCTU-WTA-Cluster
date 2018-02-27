@@ -21,6 +21,7 @@ public class SphereProblem implements ProblemInterface {
 	    }       
 		
 		public void decodeProblem(String str) {
+			// TODO:
 		}
 
 	public int getSolutionLength() {
