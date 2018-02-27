@@ -4,7 +4,6 @@ package tw.edu.nctu.dcslab.WTACluster.Behaviour;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.domain.FIPANames;
 import jade.domain.JADEAgentManagement.ShutdownPlatform;
 import jade.content.onto.basic.Action;
 import jade.content.lang.sl.SLCodec;

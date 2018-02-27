@@ -10,7 +10,7 @@ def getCommand():
 	choice = int( input( '1: Genetic\n2: PSO\n3: ABC\n' ) )
 
 	result += 'Algorithm:'
-	
+
 	if choice == 1:
 		result += 'Genetic'
 	elif choice == 2:
