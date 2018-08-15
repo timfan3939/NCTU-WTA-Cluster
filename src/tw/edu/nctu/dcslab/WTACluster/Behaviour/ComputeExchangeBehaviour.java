@@ -55,8 +55,7 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 		}
 		msg.setContent( content );
 
-		this.myAgent.send( msg );
-
+		// Saving the solution before broadcasting to other peers
 		this.sentResult += this.getTickCount() + "\t";
 		this.sentResult += (now - this.startTime) + "\t";
 		int[] isol = new int[sol.length];
@@ -64,6 +63,9 @@ public class ComputeExchangeBehaviour extends TickerBehaviour {
 			isol[i] = (int) sol[i];
 		}
 		this.sentResult += Arrays.toString(isol) + "\n" ;
+
+		this.myAgent.send( msg );
+
 	}
 
 	public int getSentCount() {
