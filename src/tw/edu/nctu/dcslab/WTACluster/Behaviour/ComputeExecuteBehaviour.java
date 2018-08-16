@@ -44,6 +44,7 @@ public class ComputeExecuteBehaviour extends Behaviour {
 	private double lossRate = 0.0;
 	private long exchangeInterval = 500;
 	private ComputeExchangeBehaviour exchangeBehaviour = null;
+	private ComputeLoggerBehaviour loggerBehaviour = null;
 
 	// Other variables
 	private String result = "";
@@ -171,8 +172,10 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.endtime += System.currentTimeMillis();
 		
 		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm, this.peerList );
+		this.loggerBehaviour = new ComputeLoggerBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm );
 		//this.myAgent.addBehaviour( this.myAgent.tbf.wrap( this.exchangeBehaviour ) );
 		this.myAgent.addBehaviour( this.exchangeBehaviour );
+		this.myAgent.addBehaviour( this.loggerBehaviour );
 
 		this.state = 1;
 		if( this.problem == null || this.algorithm == null)
@@ -216,6 +219,9 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.addResultMsg( "LossRate:" + this.lossRate );
 		this.addResultMsg( "SentResult:" );
 		this.addResultMsg( this.exchangeBehaviour.getSentResult() );
+		this.addResultMsg( "LoggerCount:" + this.loggerBehaviour.getLoggerCount() );
+		this.addResultMsg( "LoggerResult:" );
+		this.addResultMsg( this.loggerBehaviour.getLoggerResult() );
 
 
 		ACLMessage reply = message.createReply();
