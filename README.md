@@ -4,7 +4,7 @@ NCTU DCSLab WTA Cluster
 Purpose
 -------
 
-    Common Cluster are built on reliable network.  In this work, a cluster
+Common Cluster are built on reliable network.  In this work, a cluster
 environment under unreliable network is proposed.  The Weapon Target
 Assignment Problem (WTA Problem) is used to evaluate the system.
 
