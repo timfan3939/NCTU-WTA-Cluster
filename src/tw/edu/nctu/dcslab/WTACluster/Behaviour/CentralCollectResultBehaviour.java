@@ -135,7 +135,7 @@ public class CentralCollectResultBehaviour extends Behaviour {
 					ssol = subLine[1].replaceAll("\\[","").replaceAll("\\]","").replaceAll("\\s","").split(",");
 					finalsol = new Integer(ssol[w]);
 				}
-				else if( subLine[0].matches("SentResult") ) {
+				else if( subLine[0].matches("LoggerResult") ) {
 					l++;
 					for( ; l<line.length; l++ ) {
 						subLine = line[l].split("\t");
