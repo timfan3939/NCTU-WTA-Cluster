@@ -133,14 +133,14 @@ public class CentralCollectResultBehaviour extends Behaviour {
 				String[] subLine = line[l].split(":");
 				if( subLine[0].matches("Sol") ) {
 					ssol = subLine[1].replaceAll("\\[","").replaceAll("\\]","").replaceAll("\\s","").split(",");
-					finalsol = new Integer(ssol[w]);
+					finalsol = Integer.parseInt(ssol[w]);
 				}
 				else if( subLine[0].matches("LoggerResult") ) {
 					l++;
 					for( ; l<line.length; l++ ) {
 						subLine = line[l].split("\t");
 						ssol = subLine[2].replaceAll("\\[","").replaceAll("\\]","").replaceAll("\\s","").split(",");
-						solList.add( new Integer(ssol[w]) );
+						solList.add( Integer.parseInt(ssol[w]) );
 					}
 				}
 			}
