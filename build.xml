@@ -22,6 +22,11 @@
 	<target name="clean" description="clean up">
 		<delete dir="${bin.dir}" />
 	</target>
+	
+	<target name="logClear" description="clear log files">
+		<delete dir="log/*" />
+	</target>
+
 	<target name="sync" description="distribute file to other machine">
 		<exec dir="." executable="/bin/bash" osfamily="unix">
 			<arg value="script/syncfile.sh" />
@@ -37,7 +42,7 @@
 	<target name="test" description="quick test" depends="clean, build, central" >
 	</target>
 
-	<target name="central" description="start central agent" depends="build">
+	<target name="central" description="start central agent" depends="logClear, build">
 		<java fork="true" failonerror="yes" classname="jade.Boot" >
 			<classpath>
 				<pathelement location="${lib.dir}/jade.jar" />
