@@ -24,7 +24,9 @@
 	</target>
 	
 	<target name="logClear" description="clear log files">
-		<delete dir="log/*" />
+		<delete includeEmptyDirs="true">
+			<fileset dir="log" includes="**/*" />
+		</delete>
 	</target>
 
 	<target name="sync" description="distribute file to other machine">
