@@ -172,10 +172,12 @@ public class ComputeExecuteBehaviour extends Behaviour {
 		this.endtime += System.currentTimeMillis();
 		
 		this.exchangeBehaviour = new ComputeExchangeBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm, this.peerList );
-		this.loggerBehaviour = new ComputeLoggerBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm );
 		//this.myAgent.addBehaviour( this.myAgent.tbf.wrap( this.exchangeBehaviour ) );
 		this.myAgent.addBehaviour( this.exchangeBehaviour );
-		this.myAgent.addBehaviour( this.loggerBehaviour );
+		
+		this.loggerBehaviour = new ComputeLoggerBehaviour( this.myAgent, this.exchangeInterval, this.problemID, this.algorithm );
+		this.myAgent.addBehaviour( this.myAgent.tbf.wrap( this.loggerBehaviour ) );
+		//this.myAgent.addBehaviour( this.loggerBehaviour );
 
 		this.state = 1;
 		if( this.problem == null || this.algorithm == null)
@@ -234,10 +236,18 @@ public class ComputeExecuteBehaviour extends Behaviour {
 
 	@Override
 	public boolean done() {
-		if(doneYet && this.exchangeBehaviour != null) {
-			this.exchangeBehaviour.stop();
-			this.myAgent.removeBehaviour( this.exchangeBehaviour );
-			this.exchangeBehaviour = null;
+		if(doneYet) {
+			if( this.exchangeBehaviour != null ) {
+				this.exchangeBehaviour.stop();
+				this.myAgent.removeBehaviour( this.exchangeBehaviour );
+				this.exchangeBehaviour = null;
+			}
+			
+			if( this.loggerBehaviour != null ) {
+				this.loggerBehaviour.stop();
+				this.myAgent.removeBehaviour( this.loggerBehaviour );
+				this.loggerBehaviour = null;
+			}
 		}
 		return doneYet;
 	}
